@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserProfile
+from .models import UserProfile,EventCategory
 from django.contrib.auth.admin import UserAdmin
 
 class UserAdminConfig(UserAdmin):
@@ -22,3 +22,5 @@ class UserAdminConfig(UserAdmin):
 
 # Register your models here.
 admin.site.register(UserProfile, UserAdminConfig)
+
+admin.site.register(EventCategory)

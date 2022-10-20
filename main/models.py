@@ -1,7 +1,10 @@
+from asyncio.windows_events import NULL
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from ckeditor.fields import RichTextField
+from location_field.models.plain import PlainLocationField
 
 # Create your models here.
 class CustomAccountManager(BaseUserManager):
@@ -51,68 +54,27 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
 class EventCategory(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    code = models.CharField(max_length=6, unique=True)
+    code = models.CharField(max_length=7, unique=True)
     image = models.ImageField(upload_to='event_category/')
-    priority = models.IntegerField(unique=True)
-    created_user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='created_user')
-    updated_user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='updated_user')
-    created_date = models.DateField(auto_now_add=True)
-    updated_date = models.DateField(auto_now_add=True)
-    status_choice = (
-        ('disabled', 'Disabled'),
-        ('active', 'Active'),
-        ('deleted', 'Deleted'),
-        ('blocked', 'Blocked'),
-        ('completed', 'Completed'),
-    )
-    status = models.CharField(choices=status_choice, max_length=10)
-
     def __str__(self):
         return self.name
     
-    def get_absolute_url(self):
-        return reverse('event-category-list')
 
 class Event(models.Model):
     category = models.ForeignKey(EventCategory, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, unique=True)
-    uid = models.PositiveIntegerField(unique=True)
-    description = RichTextUploadingField()
-    job_category = models.ForeignKey(JobCategory, on_delete=models.CASCADE)
-    select_scheduled_status = (
-        ('yet to scheduled', 'Yet to Scheduled'),
-        ('scheduled', 'Scheduled')
-    )
-    scheduled_status = models.CharField(max_length=25, choices=select_scheduled_status)
+    description = RichTextField()
+    scheduled_status = models.BooleanField(default=False)
     venue = models.CharField(max_length=255)
     start_date = models.DateField()
     end_date = models.DateField()
-    location = LocationField()
-    points = models.PositiveIntegerField()
+    location = PlainLocationField(based_fields=['city'], zoom=7)
     maximum_attende = models.PositiveIntegerField()
-    created_user = models.ForeignKey('auth.User', on_delete=models.CASCADE, blank=True, null=True, related_name='event_created_user')
-    updated_user = models.ForeignKey('auth.User', on_delete=models.CASCADE, blank=True, null=True, related_name='event_updated_user')
+    manager = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True, related_name='event_updated_user')
     created_date = models.DateField(auto_now_add=True)
     updated_date = models.DateField(auto_now_add=True)
-    status_choice = (
-        ('disabled', 'Disabled'),
-        ('active', 'Active'),
-        ('deleted', 'Deleted'),
-        ('time out', 'Time Out'),
-        ('completed', 'Completed'),
-        ('cancel', 'Cancel'),
-    )
-    status = models.CharField(choices=status_choice, max_length=10)
+    status = models.CharField(max_length=10)
 
     def __str__(self):
         return self.name
     
-    def get_absolute_url(self):
-        return reverse('event-list')
-    
-    def created_updated(model, request):
-        obj = model.objects.latest('pk')
-        if obj.created_by is None:
-            obj.created_by = request.user
-        obj.updated_by = request.user
-        obj.save()
