@@ -2,7 +2,7 @@
 
 {% block topmenu %}
 <li class="nav-item active">
-    <a class="nav-link" href="#">Ongoing Events</a>
+    <a class="nav-link" href="{% url 'events' %}">Ongoing Events</a>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="#">Create Events</a>
@@ -11,11 +11,11 @@
     <a class="nav-link" href="{% url 'showcat' %}">Categories</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="#">Event Managers</a>
+    <a class="nav-link" href="{% url 'showmanagers' %}">Event Managers</a>
 </li>
 {% endblock %}
 
 {% block content %}
-{% block event %}
-{% endblock %}
+
+
 {% endblock %}

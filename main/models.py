@@ -44,6 +44,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     mobile= models.CharField(max_length=255)
     alt_mobile= models.CharField(max_length=255,default=None,null=True,blank=True)
     gender = models.CharField(max_length=150)
+    image = models.ImageField(upload_to='managers/')
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 
@@ -59,13 +60,13 @@ class EventCategory(models.Model):
     name = models.CharField(max_length=255, unique=True)
     code = models.CharField(max_length=7, unique=True)
     image = models.ImageField(upload_to='event_category/')
-    head = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True,)
+    head = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True, related_name='category_user')
     def __str__(self):
         return self.name
     
 
 class Event(models.Model):
-    category = models.ForeignKey(EventCategory, on_delete=models.CASCADE)
+    category = models.ForeignKey(EventCategory, on_delete=models.CASCADE, related_name='event_category')
     name = models.CharField(max_length=255, unique=True)
     description = RichTextField()
     scheduled_status = models.BooleanField(default=False)
@@ -74,14 +75,23 @@ class Event(models.Model):
     end_date = models.DateField()
     location = LocationField()
     maximum_attende = models.PositiveIntegerField()
-    manager = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True,)
-    created_date = models.DateField(auto_now_add=True)
-    updated_date = models.DateField(auto_now_add=True)
+    manager = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True, related_name='event_user')
+    created_date = models.DateField(editable=False,default=timezone.now)
+    updated_date = models.DateField(default=timezone.now)
     status = models.CharField(max_length=10)
+    
 
     def __str__(self):
         return self.name
     
+    def save(self, *args, **kwargs):
+
+        if not self.id:
+            self.created_date = timezone.now()
+        self.updated_date = timezone.now()
+        return super(Event, self).save(*args, **kwargs)
+
+
 class EventImage(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='event_image/')

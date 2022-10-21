@@ -6,6 +6,11 @@ urlpatterns = [
     path('',views.home,name='home'),
     path('home3/',views.home3,name='home3'),
     path('events/',views.events,name='events'),
+
     path('showcat/',views.showcat,name='showcat'),
-    
+    path('add_category/',views.add_category,name='add_category'),
+    path('deleteCategory/<int:pk>',views.deleteCategory,name='deleteCategory'),\
+
+    path('showmanagers/',views.showmanagers,name='showmanagers'),
+
 ]

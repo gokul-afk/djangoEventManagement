@@ -1,0 +1,138 @@
+{% extends 'index.html' %}
+
+{% block topmenu %}
+<li class="nav-item ">
+    <a class="nav-link" href="{% url 'events' %}">Ongoing Events</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">Create Events</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" href="{% url 'showcat' %}">Categories</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'showmanagers' %}">Event Managers</a>
+</li>
+{% endblock %}
+
+{% block content %}
+
+
+
+<div class="row">
+    <div class="col-10 text-left">
+        <h2 class="mb-4">Event Categories</h2>
+        
+    </div>
+    {%if request.user.is_staff %}
+    <div class="col-2 justify-content-end text-right">
+        
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsecategory" aria-expanded="false" aria-controls="collapseExample">
+            Add New Category
+          </button>
+          
+    </div> 
+    <div class="col-12 text-left">
+    <div class="collapse" id="collapsecategory">
+        <div class="card card-body">
+            <form action="{% url 'add_category' %}" method="post" class="form pt-5 pb-5" enctype="multipart/form-data" style="width: 50%; margin-left:25%">
+                {% csrf_token %}
+                <div class="row">
+                <div class="col-6">
+                <label class="form-label" for="loginName">Category Name</label>
+                <input type="text" name="name" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
+                </div>
+                <div class="col-6">
+                <label class="form-label" for="loginName">Category Code</label>
+                <input type="text" name="code" class="form-control" placeholder="Category Code"  style="border: 1px solid rgba(0,0,0,.5);">
+                </div>
+                <div class="col-6 mt-4">
+                <label class="form-label" for="loginName">Assigned Head</label>
+                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                    {% for staff in staffs %}
+                    <option value="{{ staff.id }}">{{ staff.first_name}} {{ staff.last_name}}</option>
+                    {% endfor %}
+                </select>
+                </div>  
+                <div class="col-6">
+                <label class="form-label mt-4" for="loginName">Category Photo</label>
+                <input type="file" name="image" class="form-control " accept="image/*">
+            </div>
+                </div>
+                <div class="row pt-3">
+                <button type="submit" class="col-lg-8 btn btn-outline-dark btn-block py-0 ml-3" >Submit</button>
+                <div class="col-lg-3 justify-content-end text-right " style="margin-left:30px">
+                    <a href="#collapsecategory"class="btn btn-primary btn-block btnd" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsecontent" >
+                        <i class="fa-solid fa-rectangle-xmark"></i> Cancel
+                    </a>
+                </div> 
+                </div>
+                
+                
+            </form>
+        </div>
+        
+      </div>
+    </div> 
+    {% endif %}
+</div>
+
+<div class="">
+    
+ <div class=" bg-light text-center m-5 pb-3  d-block" style="border-radius:20px">
+    
+    <table class="table  text-center table-bordered">
+        <thead class="thead">
+            <tr>
+                <th>Name</th>
+                <th width="150px">Photo</th>
+                <th >Code</th>
+                <th>Lead</th>
+                <th>Registered  Events</th>
+                <th width="100px" colspan="2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in cat %}
+            {% if i.head == request.user or request.user.is_superuser %}
+            <tr>
+                <td>{{ i.name }}</td>
+                    <td class="text-left "><img src="{{ i.image.url }}" class="w-100"></td>
+                
+                <td class="text-center">{{ i.code }}</td>
+                <td>
+                    {{i.head.first_name}} {{i.head.last_name}}<br>
+                    <i class="fa-solid fa-square-phone"></i> {{i.head.mobile}}
+                </td>
+                
+                <td>
+                    <a rol="button" class="btn m-2 rounded" href="#">{{ i.event_category.count }}</a>
+                    
+                </td>
+
+                <td>
+                    <a rol="button" class="btn m-2 rounded" href="#">EDIT</a>
+                    
+                </td>
+                {%if request.user.is_superuser %}
+                    <td>
+                        <a role="button" class="btn m-2 rounded  btnd" href="{% url 'deleteCategory' i.id %}">DELETE</a></td>
+                    </td>
+                {% endif %}
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>   
+  </div>
+
+</div>
+
+</div>
+
+
+
+
+
+
+{% endblock %}
