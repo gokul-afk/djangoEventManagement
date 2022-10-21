@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'ckeditor',
-    'location_field.apps.DefaultConfig',
+    'mapbox_location_field',
 ]
 
 MIDDLEWARE = [
@@ -135,8 +135,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'main.UserProfile'
 
 LOCATION_FIELD = {
-    'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
-    'provider.google.api_key': '',
-    'provider.google.api_libraries': '',
-    'provider.google.map.type': 'ROADMAP',
+    'provider.mapbox.access_token': '',
+    'provider.mapbox.max_zoom': 18,
+    'provider.mapbox.id': 'mapbox.streets',
 }
+
+MAPBOX_KEY = "pk.eyJ1IjoiZ29rdWxiaWp1MTQzMiIsImEiOiJjbDloam1nMDExMmkyM3BvMHQ0eGN6c2ZvIn0.gyT2dVNynuOnv1xk2lli5g"  

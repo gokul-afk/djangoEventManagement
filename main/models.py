@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from ckeditor.fields import RichTextField
-from location_field.models.plain import PlainLocationField
+from mapbox_location_field.models import LocationField  
 
 # Create your models here.
 class CustomAccountManager(BaseUserManager):
@@ -41,13 +41,16 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     start_date = models.DateField(default=timezone.now)
+    mobile= models.CharField(max_length=255)
+    alt_mobile= models.CharField(max_length=255,default=None,null=True,blank=True)
+    gender = models.CharField(max_length=150)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 
     objects = CustomAccountManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['user_name','first_name']
+    REQUIRED_FIELDS = ['user_name','first_name','mobile']
 
     def __str__(self):
         return self.user_name
@@ -56,6 +59,7 @@ class EventCategory(models.Model):
     name = models.CharField(max_length=255, unique=True)
     code = models.CharField(max_length=7, unique=True)
     image = models.ImageField(upload_to='event_category/')
+    head = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True,)
     def __str__(self):
         return self.name
     
@@ -68,9 +72,9 @@ class Event(models.Model):
     venue = models.CharField(max_length=255)
     start_date = models.DateField()
     end_date = models.DateField()
-    location = PlainLocationField(based_fields=['city'], zoom=7)
+    location = LocationField()
     maximum_attende = models.PositiveIntegerField()
-    manager = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True, related_name='event_updated_user')
+    manager = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True,)
     created_date = models.DateField(auto_now_add=True)
     updated_date = models.DateField(auto_now_add=True)
     status = models.CharField(max_length=10)
@@ -78,3 +82,6 @@ class Event(models.Model):
     def __str__(self):
         return self.name
     
+class EventImage(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='event_image/')
