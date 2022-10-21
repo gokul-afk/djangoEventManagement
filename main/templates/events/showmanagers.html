@@ -35,30 +35,60 @@
     <div class="col-12 text-left">
     <div class="collapse" id="collapsecategory">
         <div class="card card-body">
-            <form action="{% url 'add_category' %}" method="post" class="form pt-5 pb-5" enctype="multipart/form-data" style="width: 50%; margin-left:25%">
+            <form action="{% url 'addManager' %}" method="post" class="form pt-5 pb-5" enctype="multipart/form-data" style="width: 50%; margin-left:25%">
                 {% csrf_token %}
                 <div class="row">
                 <div class="col-6">
-                <label class="form-label" for="loginName">Category Name</label>
-                <input type="text" name="name" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
+                    <label class="form-label" for="loginName">First Name</label>
+                    <input type="text" name="fname" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
                 </div>
                 <div class="col-6">
-                <label class="form-label" for="loginName">Category Code</label>
-                <input type="text" name="code" class="form-control" placeholder="Category Code"  style="border: 1px solid rgba(0,0,0,.5);">
+                    <label class="form-label" for="loginName">Last Name</label>
+                    <input type="text" name="lname" class="form-control" placeholder="Category Code"  style="border: 1px solid rgba(0,0,0,.5);">
                 </div>
-                <div class="col-6 mt-4">
-                <label class="form-label" for="loginName">Assigned Head</label>
-                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
-                    {% for staff in staffs %}
-                    <option value="{{ staff.id }}">{{ staff.first_name}} {{ staff.last_name}}</option>
-                    {% endfor %}
-                </select>
-                </div>  
-                <div class="col-6">
-                <label class="form-label mt-4" for="loginName">Category Photo</label>
-                <input type="file" name="image" class="form-control " accept="image/*">
+                <div class="col-12">
+                    <label class="form-label mt-2" for="loginName">Username</label>
+                    <input type="email" name="uname" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
             </div>
+
+                <div class="col-12">
+                    <label class="form-label mt-2" for="loginName">Email</label>
+                    <input type="email" name="email" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
+                    </div>
+
+
+                
+                
+                    <div class="col-6">
+                    <label class="form-label mt-2" for="loginName">Phone 1</label>
+                    <input type="email" name="mob" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label mt-2" for="loginName">Phone 2</label>
+                        <input type="email" name="amob" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
+                    </div>
+
+                <div class="col-6 mt-2 form-outline">
+                    <label class="form-label mt-2" for="loginName">Email</label>
+                    
+                    <div class="form-outline  mt-2" >
+                    <input  class="form-" type="radio" name="gender" id="male" value="male">
+                    <label class="form-label" for="male">Male</label>
+                    <input class="form-" type="radio" name="gender" id="female" value="female">
+                    <label class="form-label" for="female">Female</label>
+                    <input class="form-" type="radio" name="gender" id="other" value="other">
+                    <label class="form-label" for="other">Other</label>                
+                    </div>  
                 </div>
+                
+
+
+                <div class="col-6 mt-2">
+                <label class="form-label mt-2" for="loginName">Category Photo</label>
+                <input type="file" name="image" class="form-control " accept="image/*">
+                </div>
+                </div>
+
                 <div class="row pt-3">
                 <button type="submit" class="col-lg-8 btn btn-outline-dark btn-block py-0 ml-3" >Submit</button>
                 <div class="col-lg-3 justify-content-end text-right " style="margin-left:30px">
@@ -87,28 +117,68 @@
                 <th>Name</th>
                 <th width="150px">Photo</th>
                 <th >Contact</th>
-                <th>Lead</th>
-                <th>Registered  Events</th>
+                <th>Gender</th>
+                <th>Categories</th>
+                <th>Ongoing Events</th>
+                <th>Upcoming Events</th>
+                <th>Status</th>
                 <th width="100px" colspan="2">Action</th>
             </tr>
         </thead>
         <tbody>
-            {% for i in cat %}
+            {% for i in staffs %}
             {% if i.head == request.user or request.user.is_superuser %}
             <tr>
-                <td>{{ i.name }}</td>
+                <td>{{ i.first_name }}{{ i.last_name }}</td>
                     <td class="text-left "><img src="{{ i.image.url }}" class="w-100"></td>
                 
-                <td class="text-center">{{ i.code }}</td>
+                <td class="text-center">{{ i.email }}
+                    <br>{{i.mobile}}
+                    {% if not i.alt_mobile == None %}
+                    <br>{{i.alt_mobile}}
+                    {% endif %}
+
+                </td>
                 <td>
-                    {{i.head.first_name}} {{i.head.last_name}}<br>
-                    <i class="fa-solid fa-square-phone"></i> {{i.head.mobile}}
+                    {{i.gender}}
+                </td>
+                
+                
+                <td>
+                    {% for c in cat %}
+                    {% if c.head == i %}
+                    <a class="text" href="#">{{ c.name }}</a><br>
+                    {% endif %}
+                    {% endfor %}
                 </td>
                 
                 <td>
-                    <a rol="button" class="btn m-2 rounded" href="#">{{ i.event_category.count }}</a>
+                    {% for e in events %}
+                    {% if e.manager == i %}
+                    <a class="text" href="#">{{ e.name }}:-{{e.category.name}}</a><br>
+                    {% endif %}
+                    {% endfor %}
+                </td>
+
+                <td>
+                    {% for eup in eventsup %}
+                    {% if eup.manager == i %}
+                    <a class="text" href="#">{{ eup.name }}:-{{eup.category.name}}</a><br>
+                    {% endif %}
+                    {% endfor %}
+                </td>
+
+                {% if i.is_active %}
+                <td>
+                    <a rol="button" class="btn m-2 rounded" href="#">Active</a>
                     
                 </td>
+                {% else %}
+                <td>
+                    <a rol="button" class="btn m-2 rounded" href="#">Inactive</a>
+                    
+                </td>
+                {% endif %}
 
                 <td>
                     <a rol="button" class="btn m-2 rounded" href="#">EDIT</a>
@@ -116,7 +186,7 @@
                 </td>
                 {%if request.user.is_superuser %}
                     <td>
-                        <a role="button" class="btn m-2 rounded  btnd" href="{% url 'deleteCategory' i.id %}">DELETE</a></td>
+                        <a role="button" class="btn m-2 rounded  btnd" href="{% url 'deleteManager' i.id %}">DELETE</a></td>
                     </td>
                 {% endif %}
             </tr>

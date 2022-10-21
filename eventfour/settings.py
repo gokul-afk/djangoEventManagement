@@ -141,3 +141,9 @@ LOCATION_FIELD = {
 }
 
 MAPBOX_KEY = "pk.eyJ1IjoiZ29rdWxiaWp1MTQzMiIsImEiOiJjbDloam1nMDExMmkyM3BvMHQ0eGN6c2ZvIn0.gyT2dVNynuOnv1xk2lli5g"  
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True                            #Transport Layer Security
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'gokulbiju1432@gmail.com'  #from email id
+EMAIL_HOST_PASSWORD = 'fhepbboblrssrelp'

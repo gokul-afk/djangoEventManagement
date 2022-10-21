@@ -44,7 +44,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     mobile= models.CharField(max_length=255)
     alt_mobile= models.CharField(max_length=255,default=None,null=True,blank=True)
     gender = models.CharField(max_length=150)
-    image = models.ImageField(upload_to='managers/')
+    image = models.ImageField(upload_to='users/')
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 
