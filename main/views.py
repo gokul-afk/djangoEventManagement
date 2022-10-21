@@ -69,7 +69,7 @@ def addManager(request):
         if not UserProfile.objects.filter(user_name=cat.user_name).exists():
             if not UserProfile.objects.filter(email=cat.email).exists():
                 cat.save()
-                message = '\nYour Temporary password is \n'+password+'\nReset on login '
+                message = '\nYour Temporary password is \n\n'+password+'\n\nReset on login '
                 print(message)
                 send_mail(
                 'Welcome to My Catering project',
