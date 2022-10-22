@@ -2,20 +2,217 @@
 
 {% block topmenu %}
 <li class="nav-item active">
-    <a class="nav-link" href="{% url 'events' %}">Ongoing Events</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="#">Create Events</a>
+    <a class="nav-link" href="{% url 'events' 'id' 'Up' %}">Events</a>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="{% url 'showcat' %}">Categories</a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'showmanagers' %}">Event Managers</a>
+<li class="nav-item ">
+    <a class="nav-link" href="{% url 'showmanagers' %}">Managers</a>
 </li>
 {% endblock %}
 
 {% block content %}
+
+
+
+<div class="row">
+    <div class="col-3 text-left">
+        <h2 class="mb-4">Events</h2>
+        
+    </div>
+
+    <div class="col-6">
+        <div class="row">
+    <div class="col justify-content-end text-right">        
+        <a href="{% url 'events' 'id' 'Completed' %}" class="btn 
+        {%if st == 'Completed' %}btn-secondary{%else %}btn-outline-secondary{%endif %}        
+        w-100" type="button"  >
+            Completed
+        </a>          
+    </div>
+    <div class="col justify-content-end text-right">        
+        <a href="{% url 'events' 'id' 'Ongoing' %}" class="btn 
+        {%if st == 'Ongoing' %}btn-success{%else %}btn-outline-success{%endif %}
+        w-100" type="button"  >
+            Ongoing
+        </a>          
+    </div>
+    <div class="col justify-content-end text-right">        
+        <a href="{% url 'events' 'id' 'Upcoming' %}" class="btn 
+        {%if st == 'Upcoming' %}btn-danger{%else %}btn-outline-danger{%endif %}
+        w-100" type="button"  >
+            Upcoming
+        </a>          
+    </div>
+    
+
+    </div>
+    </div>  
+
+    {%if request.user.is_staff %}
+    <div class="col-3 justify-content-end text-right">
+        
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsecategory" aria-expanded="false" aria-controls="collapseExample">
+            Add New Event
+        </button>
+          
+    </div> 
+    <div class="col-12 text-left">
+    <div class="collapse" id="collapsecategory">
+        <div class="card card-body">
+            <form action="{% url 'addManager' %}" method="post" class="form pt-5 pb-5" enctype="multipart/form-data" style="width: 50%; margin-left:25%">
+                {% csrf_token %}
+                <div class="row">
+                <div class="col-12 ">
+                    <label class="form-label" for="loginName">Event Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
+                </div>
+                <div class="col-12 mt-4">
+                    <label class="form-label" for="loginName">Description</label>
+                    <input type="text" name="desc" class="form-control" placeholder="Category Code"  style="border: 1px solid rgba(0,0,0,.5);">
+                </div>
+                <div class="col-6 mt-4">
+                <label class="form-label" for="loginName">Catgeory</label>
+                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                    {% for cat in Categories %}
+                    <option value="{{ cat.id }}">{{ cat.code}}</option>
+                    {% endfor %}
+                </select>
+                </div> 
+                <div class="col-6 mt-4">
+                <label class="form-label" for="loginName">Manager</label>
+                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                    <option value="same">Same as Category head</option>
+                    {% for staff in staffs %}
+                    <option value="{{ staff.id }}">{{ staff.first_name}} {{ staff.last_name}}</option>
+                    {% endfor %}
+                </select>
+                </div> 
+
+                <div class="col-6">
+                    <label class="form-label mt-2" for="loginName">Start Date</label>
+                    <input type="date" name="sdate" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label mt-2" for="loginName">End Date</label>
+                        <input type="date" name="edate" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
+                    </div>
+
+                <div class="col-12">
+                    <label class="form-label mt-2" for="loginName">Venue</label>
+                    <input type="text" name="venue" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label mt-2" for="loginName">Location</label>
+                    <input type="text" name="loc" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label mt-2" for="loginName">Maximum people expected to attend</label>
+                    <input type="number" name="maxattend" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
+                </div>
+                
+
+
+                <div class="col-6 mt-2">
+                <label class="form-label mt-2" for="loginName">Event Image</label>
+                <input type="file" name="image" class="form-control " accept="image/*">
+                </div>
+                </div>
+
+                <div class="row pt-3">
+                <button type="submit" class="col-lg-8 btn btn-outline-dark btn-block py-0 ml-3" >Submit</button>
+                <div class="col-lg-3 justify-content-end text-right " style="margin-left:30px">
+                    <a href="#collapsecategory"class="btn btn-primary btn-block btnd" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsecontent" >
+                        <i class="fa-solid fa-rectangle-xmark"></i> Cancel
+                    </a>
+                </div> 
+                </div>
+                
+                
+            </form>
+        </div>
+        
+      </div>
+    </div> 
+    {% endif %}
+</div>
+
+<div class="">
+    
+ <div class=" bg-light text-center m-5 pb-3  d-block" style="border-radius:20px">
+    
+    <table class="table  text-center table-bordered">
+        <thead class="thead">
+            <tr>
+                <th><a href="{% url 'events' 'name' st %}" style="color:black">Name</a></th>
+                <th><a href="{% url 'events' 'category' st %}" style="color:black">Category</a></th>
+                <th width="200px">Venue</th>
+                <th><a href="{% url 'events' 'start_date' st %}" style="color:black">Dates</a></th>
+                <th><a href="{% url 'events' 'maximum_attende' st %}" style="color:black">Attendee</a></th>
+                <th><a href="{% url 'events' 'manager' st %}" style="color:black">Manager</a></th>
+                <th><a href="{% url 'events' 'scheduled_status' st %}" style="color:black">Scheduled</a></th>
+                <th><a href="{% url 'events' 'status' st %}" style="color:black">Status</a></th>
+                <th width="100px" colspan="2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in events %}
+            {% if request.user.is_staff %}
+            <tr>
+                <td>{{ i.name }}</td>
+                <td >{{ i.category.code }}</td>
+                <td>{{i.venue}}</td>
+                
+                <td class="text-center">{{ i.start_date }}
+                    to
+                    {{ i.end_date }}
+                </td>
+                <td>{{i.maximum_attende}}</td>
+                
+                
+                <td>
+                    <a class="text" href="#">
+                        {{ i.manager.first_name }}{{ i.manager.last_name }}<br>
+                        {{i.manager.mobile}}
+                    </a><br>
+                </td>
+                
+                <td>
+                    {% if i.scheduled_status %}
+                        Scheduled
+                    {% else %}
+                        Not Scheduled
+                    {% endif %}
+
+                </td>
+                <td>{{i.status}}</td>
+
+                <td>
+                    <a href="#"><i class="bx bx-edit-alt" style="font-size:30px;color:#28a745"></i></a>
+                    
+                </td>
+                {%if request.user.is_superuser %}
+                    <td>
+                        <a href="#"><i class="bx bx-trash" style="font-size:30px;color:#dc3545"></i></a>
+                    </td>
+                {% endif %}
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>   
+  </div>
+
+</div>
+
+</div>
+
+
+
+
 
 
 {% endblock %}

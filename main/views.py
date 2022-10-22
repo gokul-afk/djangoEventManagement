@@ -28,14 +28,22 @@ def home(request):
     evests=Event.objects.filter(scheduled_status=False).count()
     
     context={'Ongoing':eve,'Completed':evethisyear,'Completedall':eveallyear,'managers':mngrs,'users':usrs,'schedule':evests,
-            'newUserToday':nwusrday,'Upcomingyears':eveupyear,'Upcoming':evenupcoming,'seven':evenup7}
+            'newUserToday':nwusrday,'Upco{mingyears':eveupyear,'Upcoming':evenupcoming,'seven':evenup7}
     return render(request,'home.html',context)
 
 def home3(request):
     return render(request,'index2.html')
 
-def events(request):
-    return render(request,'events/Events.html')
+def events(request,sort,st):
+    if st=='Up':
+        Events = Event.objects.all().order_by(sort)
+    else:
+        Events = Event.objects.filter(status=st).order_by(sort)
+    cat=EventCategory.objects.all()
+    staff= UserProfile.objects.filter(is_staff=True,is_active=True).exclude(is_superuser=True)
+    context = {'events':Events,'st':st,'Categories':cat,'staffs':staff}
+    return render(request,'events/Events.html',context)
+    
 
 def showcat(request):
     cate = EventCategory.objects.all()

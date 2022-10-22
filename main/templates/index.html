@@ -22,7 +22,7 @@
 			<div class="p-4 pt-5">
 				<h1><a href="#" class="logo">Catering & Events</a></h1>
 		<ul class="list-unstyled components mb-5">
-			<li  class="active">
+			<li  class="">
 				<a href="{% url 'home' %}"><span class="bx bx-grid-alt mr-3"></span>Dashboard</a>
 				
 				
@@ -31,16 +31,13 @@
 			<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="bx bx-list-ul mr-3"></span>Events</a>
 			<ul class="collapse list-unstyled" id="homeSubmenu">
 				<li>
-					<a href="{% url 'events' %}">All</a>
+					<a href="{% url 'events' sort='id' st='Up' %}">Show Events</a>
 				</li>
 			<li>
-				<a href="{% url 'home3' %}">Weddings</a>
+				<a href="{% url 'showcat' %}">Categories</a>
 			</li>
 			<li>
-				<a href="#">Corporate</a>
-			</li>
-			<li>
-				<a href="#">Social</a>
+				<a href="{% url 'showmanagers' %}">Managers</a>
 			</li>
 			</ul>
 		  </li>

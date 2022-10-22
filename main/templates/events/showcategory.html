@@ -2,16 +2,13 @@
 
 {% block topmenu %}
 <li class="nav-item ">
-    <a class="nav-link" href="{% url 'events' %}">Ongoing Events</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="#">Create Events</a>
+    <a class="nav-link" href="{% url 'events' sort='id' st='Up' %}">Events</a>
 </li>
 <li class="nav-item">
     <a class="nav-link active" href="{% url 'showcat' %}">Categories</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="{% url 'showmanagers' %}">Event Managers</a>
+    <a class="nav-link" href="{% url 'showmanagers' %}">Managers</a>
 </li>
 {% endblock %}
 
@@ -111,12 +108,12 @@
                 </td>
 
                 <td>
-                    <a rol="button" class="btn m-2 rounded" href="#">EDIT</a>
+                    <a href="#"><i class="bx bx-edit-alt" style="font-size:30px;color:#28a745"></i></a>
                     
                 </td>
                 {%if request.user.is_superuser %}
                     <td>
-                        <a role="button" class="btn m-2 rounded  btnd" href="{% url 'deleteCategory' i.id %}">DELETE</a></td>
+                        <a href="{% url 'deleteCategory' i.id %}"><i class="bx bx-trash" style="font-size:30px;color:#dc3545"></i></a>
                     </td>
                 {% endif %}
             </tr>
