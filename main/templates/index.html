@@ -2,7 +2,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-  	<title>Sidebar 03</title>
+  	<title>catering</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -23,7 +23,7 @@
 				<h1><a href="#" class="logo">Catering & Events</a></h1>
 		<ul class="list-unstyled components mb-5">
 			<li  class="active">
-				<a href="{% url 'home3' %}"><span class="bx bx-grid-alt mr-3"></span>Dashboard</a>
+				<a href="{% url 'home' %}"><span class="bx bx-grid-alt mr-3"></span>Dashboard</a>
 				
 				
 			</li>
@@ -68,6 +68,17 @@
 			  </li>
 			</ul>
 			</li>
+			<li>
+				<a href="#pageusers" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="bx bxs-user-account mr-3"></span>Users</a>
+				<ul class="collapse list-unstyled" id="pageusers">
+				  <li>
+					  <a href="#">Managers</a>
+				  </li>
+				  <li>
+					  <a href="#">Customers</a>
+				  </li>
+				</ul>
+				</li>
 			
 			<li>
 				<a href="{% url 'home3' %}"><span class="bx bx-user mr-3"></span>Profile</a>

@@ -4,10 +4,32 @@ from django.core.mail import send_mail
 from main.models import *
 from django.db.models import Count
 from django.conf import settings
+from django.utils import timezone
 
 # Create your views here.
 def home(request):
-    return render(request,'home.html')
+    today=timezone.now()
+    evening=Event.objects.filter(scheduled_status=True)
+    eveningup=evening.filter(status='Upcoming')
+
+    eve=evening.filter(status='Ongoing').count()
+    evethisyear=evening.filter(status='Completed',end_date__year=today.year).count()
+    eveallyear=evening.filter(status='Completed').count()
+
+    evenup7=eveningup.filter(start_date__lte=(today+timezone.timedelta(days = 7))).count()
+    evenupcoming=eveningup.filter(start_date__lte=(today+timezone.timedelta(days = 57))).count()-evenup7
+    eveupyear=eveningup.filter(start_date__lte=(today+timezone.timedelta(days = 187))).count()-evenupcoming-evenup7
+    
+    mngrs=UserProfile.objects.filter(is_staff=True).count()
+    usr=UserProfile.objects.filter(is_staff=False)
+    usrs=usr.count()
+    nwusrday=usr.filter(start_date=today).count()
+
+    evests=Event.objects.filter(scheduled_status=False).count()
+    
+    context={'Ongoing':eve,'Completed':evethisyear,'Completedall':eveallyear,'managers':mngrs,'users':usrs,'schedule':evests,
+            'newUserToday':nwusrday,'Upcomingyears':eveupyear,'Upcoming':evenupcoming,'seven':evenup7}
+    return render(request,'home.html',context)
 
 def home3(request):
     return render(request,'index2.html')
