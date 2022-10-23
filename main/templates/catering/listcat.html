@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+
+{% block topmenu %}
+<li class="nav-item active">
+    <a class="nav-link" href="{% url 'home' %}">Home</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">About</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">Portfolio</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">Contact</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Main</h2>
+
+
+{% endblock %}

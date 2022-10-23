@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from ckeditor.fields import RichTextField
 from mapbox_location_field.models import LocationField  
+from mptt.models import MPTTModel, TreeForeignKey
 
 # Create your models here.
 class CustomAccountManager(BaseUserManager):
@@ -95,3 +96,24 @@ class Event(models.Model):
 class EventImage(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='event_image/')
+
+class FoodCategory(MPTTModel):
+    name = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='Catering/Category/',default='0000000',)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, default=1)
+
+    def __str__(self):
+        return self.name
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
+    
+class FoodProducts(models.Model):
+    name = models.CharField(max_length=60)
+    price = models.IntegerField(default=0)
+    category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, default=NULL)
+    description = models.CharField(
+        max_length=250, default='', blank=True, null=True)
+    image = models.ImageField(upload_to='Catering/products/',default='0000000',)
+    def __str__(self):
+        return self.name

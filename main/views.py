@@ -28,11 +28,11 @@ def home(request):
     evests=Event.objects.filter(scheduled_status=False).count()
     
     context={'Ongoing':eve,'Completed':evethisyear,'Completedall':eveallyear,'managers':mngrs,'users':usrs,'schedule':evests,
-            'newUserToday':nwusrday,'Upco{mingyears':eveupyear,'Upcoming':evenupcoming,'seven':evenup7}
+            'newUserToday':nwusrday,'Upcomingyears':eveupyear,'Upcoming':evenupcoming,'seven':evenup7}
     return render(request,'home.html',context)
 
-def home3(request):
-    return render(request,'index2.html')
+def catlist(request):
+    return render(request,'catering/listcat.html')
 
 def events(request,sort,st):
     if st=='Up':

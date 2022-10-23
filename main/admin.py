@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import UserProfile,EventCategory,Event,EventImage
+from mptt.admin import MPTTModelAdmin
+from .models import UserProfile,EventCategory,Event,EventImage,FoodCategory,FoodProducts
 from django.contrib.auth.admin import UserAdmin
 from mapbox_location_field.admin import MapAdmin
 
@@ -22,6 +23,11 @@ class UserAdminConfig(UserAdmin):
          ),
     )
 
+
+class CustomMPTTModelAdmin(MPTTModelAdmin):
+    # specify pixel amount for this ModelAdmin only:
+    mptt_level_indent = 10
+
 # Register your models here.
 admin.site.register(UserProfile, UserAdminConfig)
 
@@ -30,3 +36,7 @@ admin.site.register(EventCategory)
 admin.site.register(Event, MapAdmin)
 
 admin.site.register(EventImage)
+
+admin.site.register(FoodCategory,CustomMPTTModelAdmin)
+
+admin.site.register(FoodProducts)

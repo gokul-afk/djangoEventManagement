@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
     path('',views.home,name='home'),
-    path('home3/',views.home3,name='home3'),
+    path('catlist/',views.catlist,name='catlist'),
     path('events/<str:sort>/<str:st>/',views.events,name='events'),
 
     path('showcat/',views.showcat,name='showcat'),

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'main',
     'ckeditor',
     'mapbox_location_field',
+    'mptt'
 ]
 
 MIDDLEWARE = [
