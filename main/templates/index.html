@@ -2,6 +2,7 @@
 <!doctype html>
 <html lang="en">
   <head>
+	
   	<title>catering</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,8 +13,8 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
 		<link rel="stylesheet" href="{% static 'home/css/style.css' %}">
 
-	<style>
-	</style>
+	{% block head %}
+	{% endblock %}
   </head>
   <body>
 		
@@ -123,6 +124,35 @@
 	{% endblock %}
   </div>
 	</div>
+
+	<script>
+		// TO MAKE THE MAP APPEAR YOU MUST
+		// ADD YOUR ACCESS TOKEN FROM
+		// https://account.mapbox.com
+		mapboxgl.accessToken = 'pk.eyJ1IjoiZ29rdWxiaWp1MTQzMiIsImEiOiJjbDloam1nMDExMmkyM3BvMHQ0eGN6c2ZvIn0.gyT2dVNynuOnv1xk2lli5g';
+		const map = new mapboxgl.Map({
+        container: 'map',
+        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [76.34494672,10.01659938610],
+        zoom: 11
+    });
+		
+
+	map.addControl(
+		new MapboxGeocoder({
+		accessToken: mapboxgl.accessToken,
+		mapboxgl: mapboxgl
+		})
+);
+	// Add the control to the map.
+	map.on('render', function () {
+    	map.resize();
+		});
+	map.on('load', function () {
+    	map.resize();
+		});
+	</script>
 
     <script src="{% static 'home/js/jquery.min.js' %}"></script>
     <script src="{% static 'home/js/popper.js' %}"></script>
