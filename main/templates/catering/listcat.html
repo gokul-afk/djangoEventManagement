@@ -1,22 +1,99 @@
 {% extends 'index.html' %}
 
+{% block head %}
+<style>
+    .item {
+  flex: 1;
+  height: 70%;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  transition: flex .5s ease;
+}
+
+{% for i in cat %}
+
+.item-{{i.id}} { 
+  background-image: url('{{ i.image.url }}');
+  
+  }
+
+{% endfor %}
+
+.item {
+    height: 200px;
+}
+
+
+.gb3 {
+    border: 2px solid #fff;
+}
+{%if not product %}
+.gb1:hover .gb3 {
+    border: 2px dashed #494ca2;
+}
+
+.gb1:hover .bottom a h5{
+    
+    color:#494ca2;
+}
+{% endif %}
+</style>
+
+{% endblock %}
+
 {% block topmenu %}
-<li class="nav-item active">
+<li class="nav-item ">
     <a class="nav-link" href="{% url 'home' %}">Home</a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" href="#">About</a>
+<li class="nav-item active">
+    <a class="nav-link" href="{% url 'catlist' 'All' %}">Food</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="#">Portfolio</a>
+    <a class="nav-link" href="#">Menu</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="#">Contact</a>
+    <a class="nav-link" href="#">Customize</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">Cart</a>
 </li>
 {% endblock %}
 
+
+
 {% block content %}
-<h2 class="mb-4">Main</h2>
+<h2 class="mb-4">{{branch}}</h2>
+
+<div class="row  mx-3 d-flex justify-content-center mx-5" style="padding-left:100px;padding-right:100px;">
+    {% for i in cat %}
+    <a {% if not product %} href="{% url 'catlist' i.name %}" {% else %}  href="{% url 'product' i.name %}" {% endif %}>
+
+    <div class=" col-sm-6 col-lg-4 col-xl-3 h-100 d-inline-block p-1 pt-5 gb1">
+    <div class="gb3">
+    <div class="item item-{{i.id}} m-3 p-5">
+    
+  
+    </div></div>
+    
+    <div class=" bottom">
+      <a class="nav-link" {% if not product %} href="{% url 'catlist' i.name %}" {% else %}  href="{% url 'product' i.name %}" {% endif %}>
+        <h5 class="text-center text-uppercase gb">{{i.name}}</h5></a>
+        
+    </div>
+    {%if product %}
+    <a class="btn btn-outline-dark  d-block" href="{% url 'product' i.name %}">
+        Add to Cart</a>
+    {% endif %}
+
+
+    </div>
+    </a>
+    {% empty %}
+    <h2 class="mb-4">Nop</h2>
+
+  {% endfor %}
+  </div>
 
 
 {% endblock %}

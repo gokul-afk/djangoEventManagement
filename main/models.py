@@ -100,6 +100,7 @@ class EventImage(models.Model):
 class FoodCategory(MPTTModel):
     name = models.CharField(max_length=50)
     image = models.ImageField(upload_to='Catering/Category/',default='0000000',)
+    order = models.IntegerField( blank=True, null=True, default=1)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, default=1)
 
     def __str__(self):
@@ -112,8 +113,23 @@ class FoodProducts(models.Model):
     name = models.CharField(max_length=60)
     price = models.IntegerField(default=0)
     category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, default=NULL)
+    pair= models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, default=NULL)
+    paircategory = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, default=19, related_name='_pairedandcategory')
     description = models.CharField(
         max_length=250, default='', blank=True, null=True)
     image = models.ImageField(upload_to='Catering/products/',default='0000000',)
     def __str__(self):
         return self.name
+
+
+
+
+class FoodCart(models.Model):
+    product = models.ForeignKey(FoodProducts,
+                                on_delete=models.CASCADE)
+    customer = models.ForeignKey(UserProfile,
+                                 on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=4)
+    price = models.IntegerField()
+    def __str__(self):
+        return self.product.name

@@ -4,8 +4,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
     path('',views.home,name='home'),
-    path('catlist/',views.catlist,name='catlist'),
+    path('catlist/<str:pk>/',views.catlist,name='catlist'),
     path('events/<str:sort>/<str:st>/',views.events,name='events'),
+
+    path('product/<str:pk>/',views.product,name='product'),
 
     path('showcat/',views.showcat,name='showcat'),
     path('add_category/',views.add_category,name='add_category'),

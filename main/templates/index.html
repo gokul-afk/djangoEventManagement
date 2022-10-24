@@ -16,9 +16,9 @@
 	{% block head %}
 	{% endblock %}
   </head>
-  <body>
+  <body style="background:#fff">
 		
-	<div class="wrapper d-flex align-items-stretch">
+	<div class="wrapper d-flex align-items-stretch" >
 		<nav id="sidebar" >
 			<div class="p-4 pt-5">
 				<h1><a href="#" class="logo">Catering & Events</a></h1>
@@ -47,10 +47,10 @@
 			<a href="#CatSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="bx bx-images mr-3"></span>Catering</a>
 			<ul class="collapse list-unstyled" id="CatSubmenu">
 			  <li>
-				  <a href="{% url 'catlist' %}">Foods</a>
+				  <a href="{% url 'catlist' 'All' %}">Foods</a>
 			  </li>
 			  <li>
-				  <a href="#">Food</a>
+				  <a href="#">Cart</a>
 			  </li>
 			</ul>
 			</li>
@@ -98,9 +98,9 @@
 	</nav>
 
 	<!-- Page Content  -->
-  <div id="content" class="p-4 p-md-5">
+  <div id="content" class="p-4  p-md-5">
 
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<nav class="navbar navbar-expand-lg navbar-light " >
 	  <div class="container-fluid">
 
 		<button type="button" id="sidebarCollapse" class="btn btn-primary">
@@ -111,8 +111,8 @@
 			<i class="fa fa-bars"></i>
 		</button>
 		<!-- topmenu -->
-		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		  <ul class="nav navbar-nav ml-auto">
+		<div class="collapse navbar-collapse" id="navbarSupportedContent" >
+		  <ul class="nav navbar-nav ml-auto" >
 			{% block topmenu %}
 
 			{% endblock %}

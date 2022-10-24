@@ -1,4 +1,5 @@
 import os
+from sre_parse import CATEGORIES
 from django.shortcuts import render,redirect
 from django.core.mail import send_mail
 from main.models import *
@@ -31,8 +32,28 @@ def home(request):
             'newUserToday':nwusrday,'Upcomingyears':eveupyear,'Upcoming':evenupcoming,'seven':evenup7}
     return render(request,'home.html',context)
 
-def catlist(request):
-    return render(request,'catering/listcat.html')
+def catlist(request,pk):
+    if not FoodCategory.objects.get(name=pk).is_leaf_node():
+        categories=FoodCategory.objects.get(name=pk).get_children().order_by('order')
+        context = {'cat':categories,'branch':pk,'product':False}
+    else:
+        categor= FoodCategory.objects.get(name=pk)
+        categories=FoodProducts.objects.filter(category=categor)
+        context = {'cat':categories,'branch':pk,'product':True}
+    return render(request,'catering/listcat.html',context)
+
+def product(request,pk):
+    pt=FoodProducts.objects.get(name=pk)
+    price4=(pt.price*4)
+    price8=(pt.price*8)-((pt.price//10)*4)
+    pr=pt.pair
+    pcat=FoodProducts.objects.filter(category=pt.paircategory).exclude(name=pr.name)
+    print(pcat)
+    context = {'pdt':pt,'eight':price8,'four':price4,'pair':pr,'paircat':pcat}
+    return render(request,'catering/product.html',context)
+
+def calc(self):
+    return self*4
 
 def events(request,sort,st):
     if st=='Up':
