@@ -38,7 +38,7 @@
     <a class="nav-link" href="#">Customize</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="#">Cart</a>
+    <a class="nav-link" href="{% url 'showcart' request.user.id %}">Cart</a>
 </li>
 {% endblock %}
 
@@ -59,7 +59,8 @@
         <h2 class="mb-1">{{pdt.name}}</h2>
         <div class=" mb-5" style="font-size:12px;color:black;">{{pdt.description}}</div>
 
-        <form action="#" method="post" class="form pb-5" style="width: 50%;">
+        <form action="{% url 'addtocart' pdt.name %}" method="post" class="form pb-5" style="width: 50%;">
+            {% csrf_token %}
             <div class="row">
 
             <div class="col-12">
@@ -76,10 +77,10 @@
             <div class="col-12">
                 <select class="form-control" name="selpair" style="border: 1px solid rgba(0,0,0,.5);">
                     <option value="no">no</option>
-                    <option value="{% widthratio 4 1 pair.price %}">4 portions (+Rs.{% widthratio 4 1 pair.price %})</option>
+                    <option value="4">4 portions (+Rs.{% widthratio 4 1 pair.price %})</option>
                     {% with A=pair.price|mul:8 B=pair.price|intdiv:10  %}
                     {% with C=B|mul:4  %}
-                    <option value="{{ A|sub:C }}">8 portions (+Rs.{{ A|sub:C }})</option>
+                    <option value="8">8 portions (+Rs.{{ A|sub:C }})</option>
                     {% endwith %}{% endwith %}
                 </select>
             </div>
@@ -91,10 +92,10 @@
                 <span class="form-text text-dark">Pair it with {{pdt.paircategory.name}}</span>
             </div>
             <div class="col-12">
-                <select class="form-control" name="selpair" style="border: 1px solid rgba(0,0,0,.5);">
+                <select class="form-control" name="selcate" style="border: 1px solid rgba(0,0,0,.5);">
                     <option value="no">no</option>
                     {% for ch in paircat %}
-                    <option value="ch.id">{{ch.name}} (+Rs.{% widthratio 4 1 ch.price %})</option>
+                    <option value="{{ch.id}}">{{ch.name}} (+Rs.{% widthratio 4 1 ch.price %})</option>
                     {% endfor %}
                 </select>
             </div>
@@ -110,7 +111,7 @@
             </div>
 
             </div>
-            <button type="submit" class=" btn btn-primary btn btn-block py-1 mt-4 " >Submit</button>
+            <button type="submit" class=" btn btn-primary btn btn-block py-1 mt-4 " >Addd to Cart</button>
         </form>
 
     </div>

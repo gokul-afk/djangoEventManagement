@@ -185,7 +185,7 @@
             {% for i in events %}
             {% if request.user.is_staff %}
             <tr>
-                <td>{{ i.name }}</td>
+                <td><a href="{% url 'eventshow' i.id %}">{{ i.name }}</a></td>
                 <td >{{ i.category.code }}</td>
                 <td>{{i.venue}}</td>
                 

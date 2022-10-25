@@ -47,13 +47,72 @@ def product(request,pk):
     price4=(pt.price*4)
     price8=(pt.price*8)-((pt.price//10)*4)
     pr=pt.pair
-    pcat=FoodProducts.objects.filter(category=pt.paircategory).exclude(name=pr.name)
-    print(pcat)
+    
+    pcat=FoodProducts.objects.filter(category__in=FoodCategory.objects.get(name=pt.paircategory.name).get_descendants(include_self=False))
+    if not pt.pair == None:
+        pcat=FoodProducts.objects.filter(category__in=FoodCategory.objects.get(name=pt.paircategory.name).get_descendants(include_self=False)).exclude(name=pr.name)
+    if pt.paircategory.is_leaf_node():
+        pcat=FoodProducts.objects.filter(category=pt.paircategory)
+        if not pt.pair == None:
+            pcat=FoodProducts.objects.filter(category=pt.paircategory).exclude(name=pr.name)
+
     context = {'pdt':pt,'eight':price8,'four':price4,'pair':pr,'paircat':pcat}
     return render(request,'catering/product.html',context)
 
-def calc(self):
-    return self*4
+
+def addtocart(request,pk):
+    if request.method=='POST':
+        pt=FoodProducts.objects.get(name=pk)
+        portion = int(request.POST['sel'])
+        quant= int(request.POST['count'])
+        if not quant == 0:    
+            addcart(request,pt.id,quant,portion)
+            if not pt.pair == None:
+                pairnum = request.POST['selpair']
+                if not pairnum == 'no':
+                    addcart(request,pt.pair.id,quant,int(pairnum))
+            if not pt.paircategory.id == 19:
+                catnip = request.POST['selcate']
+                if not catnip == 'no':
+                    addcart(request,catnip,quant,4)
+    return redirect((request.META.get('HTTP_REFERER')))
+
+
+def addcart(request,pk,quant,portion):
+    pt=FoodProducts.objects.get(id=pk)
+    usr= UserProfile.objects.get(user_name=request.user)
+    pric=0
+    print(portion)
+    print(type(portion))
+    if portion==4:
+        quant*=4
+        pric=pt.price*quant
+        print(pric)
+    elif portion==8:
+        quant*=8
+        pric=(pt.price*8)-((pt.price//10)*4)
+        print(pric)
+    if FoodCart.objects.filter(customer_id=usr.id, product_id=pk).exists():
+        o=FoodCart.objects.get(customer_id=usr.id, product_id=pk)
+        o.quantity+=quant
+        o.price+=pric
+        o.save()
+    else:
+        o=FoodCart()
+        o.product=pt
+        o.customer=usr
+        o.quantity=quant
+        o.price=pric
+        o.save()
+
+def showcart(request,pk):
+    usr= UserProfile.objects.get(id=pk)
+    c=FoodCart.objects.filter(customer_id=usr.id)
+    sum=0
+    for i in c:
+        sum+=i.price
+    context={'carts':c,'sum':sum,}
+    return render(request,'catering/cart.html',context)
 
 def events(request,sort,st):
     if st=='Up':
@@ -64,7 +123,13 @@ def events(request,sort,st):
     staff= UserProfile.objects.filter(is_staff=True,is_active=True).exclude(is_superuser=True)
     context = {'events':Events,'st':st,'Categories':cat,'staffs':staff}
     return render(request,'events/Events.html',context)
-    
+
+def eventshow(request,pk):
+    Events = Event.objects.get(id=pk)
+    images = EventImage.objects.filter(event=Events)
+    all = EventImage.objects.filter(event = Events, type="all")
+    context = {'event':Events,'images':images,'all':all}
+    return render(request,'events/EventsDetails.html',context)    
 
 def showcat(request):
     cate = EventCategory.objects.all()

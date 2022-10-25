@@ -95,7 +95,10 @@ class Event(models.Model):
 
 class EventImage(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    type = models.CharField(max_length=300)
     image = models.ImageField(upload_to='event_image/')
+
+
 
 class FoodCategory(MPTTModel):
     name = models.CharField(max_length=50)

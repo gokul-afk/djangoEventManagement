@@ -50,7 +50,7 @@
 				  <a href="{% url 'catlist' 'All' %}">Foods</a>
 			  </li>
 			  <li>
-				  <a href="#">Cart</a>
+				  <a href="{% url 'showcart' request.user.id %}">Cart</a>
 			  </li>
 			</ul>
 			</li>
