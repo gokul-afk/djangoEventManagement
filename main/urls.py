@@ -18,5 +18,7 @@ urlpatterns = [
     path('showmanagers/',views.showmanagers,name='showmanagers'),
     path('addManager/',views.addManager,name='addManager'),
     path('deleteManager/<int:pk>',views.deleteManager,name='deleteManager'),
-
+    
+    path('logout/',views.logout,name="logout"),
+    path('login/',views.login,name="login"),
 ]

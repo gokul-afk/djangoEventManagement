@@ -15,6 +15,12 @@
 
 	{% block head %}
 	{% endblock %}
+	<style>
+		.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #494ca2;
+}
+	</style>
   </head>
   <body style="background:#fff">
 		
@@ -50,7 +56,17 @@
 				  <a href="{% url 'catlist' 'All' %}">Foods</a>
 			  </li>
 			  <li>
-				  <a href="{% url 'showcart' request.user.id %}">Cart</a>
+				  <a 
+				{% if request.user.is_authenticated %}
+					href="{% url 'showcart' request.user.id %}"
+				{%else%}
+					href="#"
+					data-target="#exampleModalCenter"
+					role="button"
+					aria-expanded="false"
+					data-toggle="modal"
+				{%endif%}
+				  >Cart</a>
 			  </li>
 			</ul>
 			</li>
@@ -79,7 +95,18 @@
 				</li>
 			
 			<li>
-				<a href="#"><span class="bx bx-user mr-3"></span>Profile</a>
+				<a
+				{% if request.user.is_authenticated %}
+            		href="#"
+            	{%else%}
+					href="#"
+					data-target="#exampleModalCenter"
+					role="button"
+					aria-expanded="false"
+					data-toggle="modal"
+            	{%endif%}
+				
+				><span class="bx bx-user mr-3"></span>Profile</a>
 			</li>
 		  <li>
 			  <a href="#"><span class="bx bx-info-circle mr-3"></span>About</a>
@@ -124,6 +151,166 @@
 	{% endblock %}
   </div>
 	</div>
+
+	
+<!-- Modal -->
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-body">
+          <div class="row d-flex justify-content-center">
+
+            <!--Grid column-->
+            <div class="p-2 m-1 bg-light justify-content-center w-100">
+            
+            
+            
+            <div class="container  " style="width:100%;">
+                
+            <ul class="nav nav-pills nav-justified nav-pills-primary mb-3" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist" aria-expanded="false">
+                        Login
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#link2" role="tablist" aria-expanded="false">
+                        Register
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content tab-space">
+                <div class="tab-pane active" id="link1" aria-expanded="true">
+                    <form method='post' class='post-form form' action="{% url 'login' %}">
+                        {% csrf_token %}
+                
+                      
+                
+                      <!-- User Name input -->
+                      <div class="form-outline mb-4">
+                        <label class="form-label" for="loginName">Username</label>
+                        <input type="text" id="loginName" placeholder="Username" class="form-control" name="username" />
+                      </div>
+                
+                      <!-- Password input -->
+                      <div class="form-outline mb-4">
+                        <label class="form-label" for="loginPassword">Password</label>
+                        <input type="password" placeholder="Password" id="loginPassword" class="form-control" name="password" />
+                      </div>
+                
+                      <!-- 2 column grid layout -->
+                      <div class="row mb-4">
+                        <div class="col-6 d-flex justify-content-center">
+                          <!-- Checkbox -->
+                          <div class="form-check mb-3 mb-md-0">
+                            <input class="form-check-input" type="checkbox" value="" id="loginCheck"/>
+                            <label class="form-check-label" for="loginCheck"> Remember me </label>
+                          </div>
+                        </div>
+                
+                        <div class="col-6 d-flex justify-content-center">
+                          <!-- Simple link -->
+                          <a href="#!">Forgot password?</a>
+                        </div>
+                      </div>
+                      <div class="text-center">
+                      <!-- Submit button -->
+                      <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+                    </div>
+                    </form>
+                </div>
+            
+                <div class="tab-pane" id="link2" aria-expanded="false">
+                    <form action="#" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                  
+                        <!-- Name input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="registerName">First Name</label>
+                            <input type="text" id="registerName" name="first_name" class="form-control" placeholder="First Name" required>
+                        </div>
+            
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="registerLName">Last Name</label>
+                            <input type="text" id="registerLName" name="last_name" class="form-control" placeholder="Last Name">
+                        </div>
+                        
+                        <div class="form-outline mb-4">
+                          <label class="form-label" for="registerA2">Address Line1</label>
+                          <input type="text" id="registerA2" name="adrone" class="form-control" placeholder="Houseno/Flatno/Apartment">
+                      </div>
+                      <div class="form-outline mb-4">
+                        <label class="form-label" for="registerA3">Address Line 2</label>
+                        <input type="text" id="registerA3" name="adrtwo" class="form-control" placeholder="Last Name">
+                    </div>
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="registerA4">Address Line 3</label>
+                      <input type="text" id="registerA4" name="adrthree" class="form-control" placeholder="Last Name">
+                  </div>
+
+                        <!-- Username input -->
+                        <div class="form-outline mb-4">
+                          <label class="form-label" for="registerUsername">Username</label>
+                          <input type="text" id="registerUsername" name="username" class="form-control" placeholder="Username" required>
+                        </div>
+
+                        <div class="form-outline mb-4 ">
+                          <label class="form-label" for="phone">Phone Number</label>
+                          <input type="number" id="phone" name="mobile" class="form-control" placeholder="Enter your mobile number" required>
+                        </div>
+                  
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                          <label class="form-label" for="registerEmail">Email</label>
+                          <input type="email" id="registerEmail" name="email" class="form-control" placeholder="Email" required>
+                        </div>
+                  
+                        <!-- Password input -->
+                        <div class="form-outline mb-4">
+                          <label class="form-label" for="registerPassword">Password</label>
+                          <input type="password" id="registerPassword" name="password" class="form-control" placeholder="Strong Password" required>
+                        </div>
+                  
+                        <!-- Repeat Password input -->
+                        <div class="form-outline mb-4">
+                          <label class="form-label" for="registerRepeatPassword">Repeat password</label>
+                          <input type="password" id="registerRepeatPassword" name="cpassword" class="form-control" placeholder="Confirm Password" required>
+                        </div>
+            
+                        <!-- Radio Gender input -->
+                        <div class="form-outline mb-4 text-center" >
+                            <input type="radio" name="gender" id="male" value="Male">
+                            <label for="male">Male</label>
+                            <input type="radio" name="gender" id="female" value="Female">
+                            <label for="female">Female</label>
+                            <input type="radio" name="gender" id="Other" value="Female">
+                            <label for="other">Other</label>
+                        </div>
+                        <div class="text-center">
+                        <input class="form-check-input ml-5" type="checkbox" value="" id="registerCheck"
+                            aria-describedby="registerCheckHelpText" required />
+                            I have read and agree to the terms
+                          
+                        </div>
+                  
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-primary" style="margin-left: 40%;">Submit</button>    
+                      </form>
+                    </div>
+                
+                </div>
+            </div>
+            <!--Grid column-->
+            
+            </div>
+            <!--Grid row-->
+
+
+        </div>
+      </div>
+    </div>
+  </div>	
 
 	<script>
 		// TO MAKE THE MAP APPEAR YOU MUST

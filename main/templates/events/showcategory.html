@@ -21,7 +21,7 @@
         <h2 class="mb-4">Event Categories</h2>
         
     </div>
-    {%if request.user.is_staff %}
+    {%if request.user.is_superuser %}
     <div class="col-2 justify-content-end text-right">
         
         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsecategory" aria-expanded="false" aria-controls="collapseExample">
@@ -91,7 +91,7 @@
         </thead>
         <tbody>
             {% for i in cat %}
-            {% if i.head == request.user or request.user.is_superuser %}
+            {% if request.user.is_staff %}
             <tr>
                 <td>{{ i.name }}</td>
                     <td class="text-left "><img src="{{ i.image.url }}" class="w-100"></td>
@@ -107,10 +107,13 @@
                     
                 </td>
 
+                {% if i.head == request.user or request.user.is_superuser %}
                 <td>
                     <a href="#"><i class="bx bx-edit-alt" style="font-size:30px;color:#28a745"></i></a>
                     
                 </td>
+                {% endif %} 
+
                 {%if request.user.is_superuser %}
                     <td>
                         <a href="{% url 'deleteCategory' i.id %}"><i class="bx bx-trash" style="font-size:30px;color:#dc3545"></i></a>

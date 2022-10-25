@@ -5,7 +5,10 @@ from django.core.mail import send_mail
 from main.models import *
 from django.db.models import Count
 from django.conf import settings
+from django.contrib.auth.models import auth
 from django.utils import timezone
+from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def home(request):
@@ -209,3 +212,42 @@ def deleteManager(request,pk):
         else:pass
     pp.delete()
     return redirect('showmanagers')
+
+def login(request):
+    try:
+        if request.method == 'POST':
+            
+            try:
+                username = request.POST['username']
+                password = request.POST['password']
+                if not UserProfile.objects.filter(user_name=username):
+                    user =UserProfile.objects.get(email=username)
+                else:
+                    user =UserProfile.objects.get(user_name=username)
+                print(user)
+                try:
+                    validate_password(password, user)
+                    print("val succ")
+                    request.session["uid"] = user.id
+                    if user is not None:
+                        auth.login(request, user)
+                        print("success")
+                        return redirect('home')
+                    else:
+                        print('Invalid username or password')
+                        return render(request,'home')
+                except :
+                    print("Validation error")
+            except:
+                print( 'main code')
+                return render(request, 'home.html')
+        else:
+            return render(request,'home')
+    except:
+        print('whole code')
+        return render(request,'home')
+
+def logout(request):
+    request.session["uid"] = ""
+    auth.logout(request)
+    return redirect('home')
