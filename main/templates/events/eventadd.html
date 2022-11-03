@@ -1,0 +1,119 @@
+{% extends 'index.html' %}
+
+
+
+{% block head %}
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
+<style>
+
+</style>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet"
+    href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+
+{% endblock %}
+
+{% block topmenu %}
+<li class="nav-item active">
+    <a class="nav-link" href="{% url 'events' 'id' 'Up' %}">Events</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'showcat' %}">Categories</a>
+</li>
+<li class="nav-item ">
+    <a class="nav-link" href="{% url 'showmanagers' %}">Managers</a>
+</li>
+{% endblock %}
+
+{% block content %}
+
+
+
+
+
+<form action="{% url 'addeventuser' %}" method="post" class="form pt-5 pb-5" enctype="multipart/form-data"
+    style="width: 50%; margin-left:25%">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-12 ">
+            <label class="form-label" for="loginName">Event Name</label>
+            <input type="text" name="name" class="form-control" placeholder="Category Name"
+                style="border: 1px solid rgba(0,0,0,.5);">
+        </div>
+        <div class="col-12 mt-4">
+            <label class="form-label" for="loginName">Description</label>
+            <input type="text" name="desc" class="form-control" placeholder="Category Code"
+                style="border: 1px solid rgba(0,0,0,.5);">
+        </div>
+        <div class="col-6 mt-4">
+            <label class="form-label" for="loginName">Catgeory</label>
+            <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                {% for cat in categories %}
+                <option value="{{ cat.id }}">{{ cat.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-6 mt-4">
+            <label class="form-label" for="loginName">Contact Number</label>
+            <input type="text" class="form-control" list="cars" name="contact" style="border: 1px solid rgba(0,0,0,.5);" placeholder="Drop down">
+            <datalist id="cars">
+                <option>{{ user.mobile }}</option>
+                <option>{{ user.alt_mobile }}</option>
+            </datalist>
+        </div>
+
+        <div class="col-6">
+            <label class="form-label mt-2" for="loginName">Start Date</label>
+            <input type="date" name="sdate" class="form-control" placeholder="Category Name"
+                style="border: 1px solid rgba(0,0,0,.5);">
+        </div>
+        <div class="col-6">
+            <label class="form-label mt-2" for="loginName">End Date</label>
+            <input type="date" name="edate" class="form-control" placeholder="Category Name"
+                style="border: 1px solid rgba(0,0,0,.5);">
+        </div>
+
+        <div class="col-12">
+            <label class="form-label mt-2" for="loginName">Venue</label>
+            <input type="text" name="venue" class="form-control" placeholder="Category Name"
+                style="border: 1px solid rgba(0,0,0,.5);">
+        </div>
+
+
+
+
+
+        <div class="col-12">
+            <label class="form-label mt-2" for="loginName">Maximum people expected to attend</label>
+            <input type="number" name="maxattend" class="form-control" placeholder="Category Name"
+                style="border: 1px solid rgba(0,0,0,.5);">
+        </div>
+
+
+
+
+    </div>
+
+    <div class="row pt-3">
+        <button type="submit" class="col-lg-8 btn btn-outline-dark btn-block py-0 ml-3">Submit</button>
+        <div class="col-lg-3 justify-content-end text-right " style="margin-left:30px">
+            <a href="#collapsecategory" class="btn btn-primary btn-block btnd">
+                <i class="fa-solid fa-rectangle-xmark"></i> Cancel
+            </a>
+        </div>
+    </div>
+
+
+</form>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

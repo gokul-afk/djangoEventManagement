@@ -1,0 +1,217 @@
+{% extends 'index.html' %}
+
+{% block topmenu %}
+<li class="nav-item">
+    <a class="nav-link" href="#">About</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">Contact</a>
+</li>
+{% endblock %}
+
+
+{% block content %}
+{% load static %}
+<div class="row text-uppercase text-center d-block "
+    style="font-size:150px;line-height: 130px;color:#494ca2 ;font-weight: 600;">
+</div>
+
+<!-- Profile widget -->
+<div class="bg-white shadow rounded overflow-hidden">
+    <div class="px-4 pt-3 pb-4 cover">
+        <div class="media align-items-end profile-head">
+            <div class="profile mr-3">
+                {% if user.img == '/static/image/default.png' %}
+                <img src="{% static 'image/default.png' %}"  alt="..." width="130" class="rounded mb-2 img-thumbnail">
+                {% else %}    
+                <img src="{{ user.image.url }}"  alt="..." width="130" class="rounded mb-2 img-thumbnail">
+                {% endif %}
+                <a href="#" class="btn btn-outline-dark btn-sm btn-block" 
+                    data-toggle="modal" data-target=".bd-example-modal-lg">Edit
+                    profile</a></div>
+
+
+
+            <div class="media-body mb-5 text-white">
+                <h4 class="mt-0 mb-0">{{user.first_name}} {{user.last_name}}</h4>
+                {% if user.is_superuser%}
+                <p class="small mb-4 text-secondary"> <i class="fas fa-map-marker-alt mr-2"></i>Superuser</p>
+                {% elif user.is_staff %}
+                <p class="small mb-4 text-secondary"> <i class="fas fa-map-marker-alt mr-2"></i>Staff</p>
+                {% else %}
+                <p class="small mb-4 text-secondary"> <i class="fas fa-map-marker-alt mr-2"></i>User</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="bg-light p-4 d-flex justify-content-end text-center">
+        <ul class="list-inline mb-0">
+            <li class="list-inline-item">
+                <h5 class="font-weight-bold mb-0 d-block">{{Processing}}</h5><small class="text-muted"> <i
+                        class="fas fa-image mr-1"></i>Pending Orders</small>
+            </li>
+            <li class="list-inline-item">
+                <h5 class="font-weight-bold mb-0 d-block">{{Approved}}</h5><small class="text-muted"> <i
+                        class="fas fa-user mr-1"></i>Order approved</small>
+            </li>
+            <li class="list-inline-item">
+                <h5 class="font-weight-bold mb-0 d-block">{{Cancelled}}</h5><small class="text-muted"> <i
+                        class="fas fa-user mr-1"></i>Cancelled</small>
+            </li>
+        </ul>
+    </div>
+    <div class="px-4 py-3">
+        <h5 class="mb-0">Contact</h5>
+        <div class="p-4 rounded shadow-sm bg-light">
+            <p class="font-italic mb-0">{{user.email}}</p>
+            <p class="font-italic mb-0">{{user.mobile}} , {{user.alt_mobile}}</p>
+            <p class="font-italic mb-0"></p>
+        </div>
+    </div>
+    <div class="py-4 px-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h5 class="mb-0">Recent Event Details</h5><a data-toggle="collapse" href="#allevent" role="button" aria-expanded="false" aria-controls="#allevent" class="btn btn-link text-muted">Show all</a>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 mb-2 pr-lg-1">
+                {% for i in Events %}
+                
+                {% if i.scheduled_status and i.status == "Processing" %}
+                <div class="card mt-2">
+                    <div class="card-body">
+                Your event <strong class="text-dark">{{i.name}}</strong> has been scheduled and is undergoing review process by our event managers.<br>
+                 <a href="{% url 'eventshow' i.id %}" style="color:black" >
+                    more info <i class="bx bxs-chevrons-right text-gray-300 pt-2" style="font-size:15px;position:relative;top: 2px;"></i>
+                </a>
+                </div></div>
+                {%endif%}
+                
+
+                
+                {% if not i.scheduled_status %}
+                <div class="card mt-2">
+                <div class="card-body">
+                    Your event <strong class="text-dark">{{i.name}}</strong> has been requested. Contact us if this takes more than 48hours or
+                 if your event requires immediate processing!!<br>
+                 <a href="{% url 'eventshow' i.id %}" style="color:black" >
+                    more info <i class="bx bxs-chevrons-right text-gray-300 pt-2" style="font-size:15px;position:relative;top: 2px;"></i>
+                </a>
+            </div></div>
+                {%endif%}
+                
+
+                {% if i.status == "Cancelled" %}
+                <div class="card mt-2">
+                    <div class="card-body">
+                 Your event <strong class="text-danger">{{i.name}}</strong> has been <b>Cancelled</b>.<br>
+                 <a href="{% url 'eventshow' i.id %}" style="color:black" >
+                    more info <i class="bx bxs-chevrons-right text-gray-300 pt-2" style="font-size:15px;position:relative;top: 2px;"></i>
+                </a>
+            </div></div>
+                {%endif%}
+                
+                {% endfor %}
+            </div>
+
+            <div class="col-lg-6 mb-2 pr-lg-1">
+                {% for i in Events %}
+                
+                {% if i.status == "Upcoming" %}
+                <div class="card mt-2">
+                    <div class="card-body">
+                Your event <strong class="text-dark">{{i.name}}</strong> is upcoming.<br>
+                 <a href="{% url 'eventshow' i.id %}" style="color:black" >
+                    more info <i class="bx bxs-chevrons-right text-gray-300 pt-2" style="font-size:15px;position:relative;top: 2px;"></i>
+                </a>
+                </div></div>
+                {%endif%}
+                
+
+                
+                {% if i.status == "Ongoing" %}
+                <div class="card mt-2">
+                <div class="card-body">
+                    Your event <strong class="text-dark">{{i.name}}</strong> is ongoing<br>
+                 <a href="{% url 'eventshow' i.id %}" style="color:black" >
+                    more info <i class="bx bxs-chevrons-right text-gray-300 pt-2" style="font-size:15px;position:relative;top: 2px;"></i>
+                </a>
+            </div></div>
+                {%endif%}
+            
+                
+                {% endfor %}
+            </div>
+            <div class="col-lg-12 mb-2 pr-lg-1 collapse" id="allevent">
+                
+                {% for i in Events %}
+                
+
+                <div class="card mt-1 py-1 w-100">
+                    <div class="card-body py-1">
+                    <strong class="text-dark">{{i.name}}</strong>&nbsp&nbsp&nbsp&nbsp {{i.status}}
+                <span class="text-right ">
+                 <a href="{% url 'eventshow' i.id %}" style="color:black" >
+                    &nbsp&nbsp&nbsp&nbsp more info <i class="bx bxs-chevrons-right text-gray-300 pt-2" style="font-size:15px;position:relative;top: 2px;"></i>
+                </a></span>
+                </div></div>
+                
+                {% endfor %}
+            </div>
+    </div>
+</div>
+<div class="col-12 text-center mt-5">
+    <a class="btn btn-danger d-block" data-toggle="modal" data-target="#resetpassword" href="#">Reset Password</a>
+</div>
+
+
+<!-- Modal -->
+<div class=" col-12  mt-5 modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+aria-hidden="true">
+<div class="modal-dialog modal-lg ">
+    <div class="modal-content p-5">
+        Edit Profile
+    </div>
+</div>
+</div>
+
+<div class="modal fade" id="resetpassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Reset Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method='post' class='post-form form' action="{% url 'reset' %}">
+                    {% csrf_token %}
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="loginPassword">Current Password</label>
+                        <input type="password" placeholder="Password" id="loginPassword" class="form-control"
+                            name="opassword" style="border:1px solid black;" />
+                    </div>
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="loginPassword">New Password</label>
+                        <input type="password" placeholder="Password" id="loginPassword" class="form-control"
+                            name="password" style="border:1px solid black;" />
+                    </div>
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="loginPassword">Repeat Password</label>
+                        <input type="password" placeholder="Password" id="loginPassword" class="form-control"
+                            name="cpassword" style="border:1px solid black;" />
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+{% endblock %}

@@ -125,7 +125,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static')]
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -135,6 +135,10 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'main.UserProfile'
+AUTHENTICATE_BACKENDS = (
+    'djangp.contrib.auth.backends.AllowAllUsersModelBackend',
+    'main.backends.AuthBackend'
+)
 
 LOCATION_FIELD = {
     'provider.mapbox.access_token': '',
@@ -147,5 +151,5 @@ MAPBOX_KEY = "pk.eyJ1IjoiZ29rdWxiaWp1MTQzMiIsImEiOiJjbDloam1nMDExMmkyM3BvMHQ0eGN
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True                            #Transport Layer Security
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'gokulbiju1432@gmail.com'  #from email id
-EMAIL_HOST_PASSWORD = 'fhepbboblrssrelp'
+EMAIL_HOST_USER = 'yytriumed@gmail.com'  #from email id
+EMAIL_HOST_PASSWORD = 'hunqwmujweauzdgy'

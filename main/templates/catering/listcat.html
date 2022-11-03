@@ -43,29 +43,26 @@
 {% endblock %}
 
 {% block topmenu %}
-<li class="nav-item ">
-    <a class="nav-link" href="{% url 'home' %}">Home</a>
-</li>
 <li class="nav-item active">
     <a class="nav-link" href="{% url 'catlist' 'All' %}">Food</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="#">Menu</a>
+    <a class="nav-link" href="{% url 'menus' 0 %}">Menu</a>
 </li>
+{% if request.user.is_authenticated %}
 <li class="nav-item">
-    <a class="nav-link" href="#">Customize</a>
+    <a class="nav-link" 
+    href="{% url 'showcart' request.user.id %}"
+
+>Cart</a>
 </li>
+{%endif%}
+{% if request.user.is_authenticated %}
 <li class="nav-item">
-    <a class="nav-link" {% if request.user.is_authenticated %}
-    href="{% url 'showcart' request.user.id %"
-{%else%}
-    href="#"
-    data-target="#exampleModalCenter"
-    role="button"
-    aria-expanded="false"
-    data-toggle="modal"
-{%endif%} >Cart</a>
+    <a class="nav-link" 
+     href="{% url 'showorder' request.user.id %}" >Orders</a>
 </li>
+{%endif%}
 {% endblock %}
 
 

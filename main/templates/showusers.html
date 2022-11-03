@@ -1,0 +1,100 @@
+{% extends 'index.html' %}
+
+{% block topmenu %}
+<li class="nav-item ">
+    <a class="nav-link" href="{% url 'events' sort='id' st='Up' %}">Events</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'showcat' %}">Categories</a>
+</li>
+<li class="nav-item active">
+    <a class="nav-link" href="{% url 'showmanagers' %}">Managers</a>
+</li>
+{% endblock %}
+
+{% block content %}
+
+
+
+<div class="row">
+    <div class="col-9 text-left">
+        <h2 class="mb-4">Event Managers</h2>
+
+    </div>
+    
+
+<div class="">
+
+    <div class=" bg-light text-center m-5 pb-3  d-block" style="border-radius:20px">
+
+        <table class="table  text-center table-bordered">
+            <thead class="thead">
+                <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Gender</th>>
+                    <th>Status</th>
+                    <th width="100px" colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in staffs %}
+                {% if request.user.is_staff %}
+                <tr>
+                    <td>{{ i.first_name }}{{ i.last_name }}</td>
+                    
+
+                    <td class="text-center">{{ i.email }}
+                        <br>{{i.mobile}}
+                        {% if not i.alt_mobile == None %}
+                        <br>{{i.alt_mobile}}
+                        {% endif %}
+
+                    </td>
+                    <td>
+                        {{i.gender}}
+                    </td>
+
+
+                    
+                    {% if i.is_active %}
+                    <td>
+                        <a rol="button" class="btn m-2 rounded" href="#">Active</a>
+
+                    </td>
+                    {% else %}
+                    <td>
+                        <a rol="button" class="btn m-2 rounded" href="#">Inactive</a>
+
+                    </td>
+                    {% endif %}
+                    {% if request.user.is_staff %}
+                    <td>
+                        <a href="#"><i class="bx bx-edit-alt" style="font-size:30px;color:#28a745"></i></a>
+
+                    </td>
+                    {% endif %}
+                    {%if request.user.is_superuser %}
+                    <td>
+                        <a href="{% url 'deleteManager' i.id %}"><i class="bx bx-trash"
+                                style="font-size:30px;color:#dc3545"></i></a>
+                    </td>
+                    {% endif %}
+
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</div>
+
+
+
+
+
+
+{% endblock %}

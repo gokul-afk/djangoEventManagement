@@ -1,4 +1,5 @@
 from asyncio.windows_events import NULL
+from tokenize import blank_re
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -40,14 +41,15 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     user_name = models.CharField(max_length=150, unique=True)
     first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150,default=None,null=True,blank=True)
     start_date = models.DateField(default=timezone.now)
     mobile= models.CharField(max_length=255)
     alt_mobile= models.CharField(max_length=255,default=None,null=True,blank=True)
-    gender = models.CharField(max_length=150)
+    gender = models.CharField(max_length=150,default=None,null=True,blank=True)
     image = models.ImageField(upload_to='users/')
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_pass = models.BooleanField(default=False)
 
     objects = CustomAccountManager()
 
@@ -69,18 +71,21 @@ class EventCategory(models.Model):
 class Event(models.Model):
     category = models.ForeignKey(EventCategory, on_delete=models.CASCADE, related_name='event_category')
     name = models.CharField(max_length=255, unique=True)
-    description = RichTextField()
+    description = models.CharField(max_length=1200)
     scheduled_status = models.BooleanField(default=False)
     venue = models.CharField(max_length=255)
     start_date = models.DateField()
     end_date = models.DateField()
-    location = LocationField()
+    location = LocationField(default=(76.361736,10.009277))
     maximum_attende = models.PositiveIntegerField()
-    manager = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True, related_name='event_user')
+    manager = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True, related_name='event_manager')
+    customer = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True, related_name='event_customer') 
+    contact =  models.CharField(max_length=255)
     created_date = models.DateField(editable=False,default=timezone.now)
     updated_date = models.DateField(default=timezone.now)
-    status = models.CharField(max_length=10)
-    
+    status = models.CharField(max_length=10,default="Processing")
+
+
 
     def __str__(self):
         return self.name
@@ -134,5 +139,28 @@ class FoodCart(models.Model):
                                  on_delete=models.CASCADE)
     quantity = models.IntegerField(default=4)
     price = models.IntegerField()
+    def __str__(self):
+        return self.product.name
+
+class menuCart(models.Model):
+    product = models.ForeignKey(FoodProducts,
+                                on_delete=models.CASCADE)
+    customer = models.ForeignKey(UserProfile,
+                                 on_delete=models.CASCADE)
+    event = models.ForeignKey(Event,on_delete=models.CASCADE,blank=True, null=True,default=NULL)
+    quantity = models.IntegerField()
+    price = models.IntegerField()
+    def __str__(self):
+        return self.product.name
+
+class FoodOrder(models.Model):
+    product = models.ForeignKey(FoodProducts,
+                                on_delete=models.CASCADE)
+    customer = models.ForeignKey(UserProfile,
+                                 on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=4)
+    created_date = models.DateField(editable=False,default=timezone.now)
+    price = models.IntegerField()
+    status = models.CharField(max_length=10,default="Processing")
     def __str__(self):
         return self.product.name

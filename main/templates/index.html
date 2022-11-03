@@ -19,7 +19,17 @@
 		.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff;
     background-color: #494ca2;
+    }
+    .error
+{
+  color: red;
+  size: 80%
 }
+.hidden
+{
+  display:none
+}
+
 	</style>
   </head>
   <body style="background:#fff">
@@ -29,14 +39,18 @@
 			<div class="p-4 pt-5">
 				<h1><a href="#" class="logo">Catering & Events</a></h1>
 		<ul class="list-unstyled components mb-5">
+      {% if request.user.is_staff %}
 			<li  class="">
-				<a href="{% url 'home' %}"><span class="bx bx-grid-alt mr-3"></span>Dashboard</a>
+				<a href="{% url 'dashboard' %}"><span class="bx bx-grid-alt mr-3"></span>Dashboard</a>
 				
 				
 			</li>
+      {% endif %}
+      
 			<li>
 			<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="bx bx-list-ul mr-3"></span>Events</a>
 			<ul class="collapse list-unstyled" id="homeSubmenu">
+        {% if request.user.is_staff %}    
 				<li>
 					<a href="{% url 'events' sort='id' st='Up' %}">Show Events</a>
 				</li>
@@ -46,14 +60,33 @@
 			<li>
 				<a href="{% url 'showmanagers' %}">Managers</a>
 			</li>
+      
+      {% endif %}
+      <li>
+        <a href="#">Wedding</a>
+      </li>
+    <li>
+      <a href="#">Corporate</a>
+    </li>
+    <li>
+      <a href="#">Parties</a>
+    </li>
+    {% if not request.user.is_staff %}
+    <li>
+      <a href="{% url 'eventadd' %}">Request Event</a>
+    </li>
+    {% endif %}
 			</ul>
 		  </li>
-		  
+      
 		  <li>
 			<a href="#CatSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="bx bx-images mr-3"></span>Catering</a>
 			<ul class="collapse list-unstyled" id="CatSubmenu">
 			  <li>
 				  <a href="{% url 'catlist' 'All' %}">Foods</a>
+			  </li>
+        <li>
+				  <a href="{% url 'menus' 0 %}">Menus</a>
 			  </li>
 			  <li>
 				  <a 
@@ -82,22 +115,15 @@
 			  </li>
 			</ul>
 			</li>
+      {% if request.user.is_staff %}
 			<li>
-				<a href="#pageusers" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="bx bxs-user-account mr-3"></span>Users</a>
-				<ul class="collapse list-unstyled" id="pageusers">
-				  <li>
-					  <a href="#">Managers</a>
-				  </li>
-				  <li>
-					  <a href="#">Customers</a>
-				  </li>
-				</ul>
+				<a href="{% url 'showusers' %}" ><span class="bx bxs-user-account mr-3"></span>Users</a>
 				</li>
-			
+			{% endif %}
 			<li>
 				<a
 				{% if request.user.is_authenticated %}
-            		href="#"
+            		href="{% url 'profile' request.user.id %}"
             	{%else%}
 					href="#"
 					data-target="#exampleModalCenter"
@@ -108,6 +134,8 @@
 				
 				><span class="bx bx-user mr-3"></span>Profile</a>
 			</li>
+
+      
 		  <li>
 			  <a href="#"><span class="bx bx-info-circle mr-3"></span>About</a>
 		  </li>
@@ -140,9 +168,26 @@
 		<!-- topmenu -->
 		<div class="collapse navbar-collapse" id="navbarSupportedContent" >
 		  <ul class="nav navbar-nav ml-auto" >
+      <li class="nav-item">
+          <a class="nav-link" href="{% url 'home' %}">Home</a>
+      </li>
+
 			{% block topmenu %}
 
 			{% endblock %}
+      {% if request.user.is_authenticated %}
+      <li class="nav-item">
+        <a class="log nav-link py-0 mt-2" href="{% url 'logout' %}" >Logout</a>
+      </li>
+      {%else%}
+      <li class="nav-item">
+        <a class="log nav-link py-0 mt-2" href="#"
+        data-target="#exampleModalCenter"
+        role="button"
+        aria-expanded="false"
+        data-toggle="modal">Login</a>
+      </li>
+      {%endif%}
 		  </ul>
 		</div>
 	  </div>
@@ -222,73 +267,59 @@
                 </div>
             
                 <div class="tab-pane" id="link2" aria-expanded="false">
-                    <form action="#" method="post" enctype="multipart/form-data">
+                    <form action="{% url 'adduser' %}" method="post" enctype="multipart/form-data" id="myform">
                         {% csrf_token %}
                   
                         <!-- Name input -->
                         <div class="form-outline mb-4">
                             <label class="form-label" for="registerName">First Name</label>
-                            <input type="text" id="registerName" name="first_name" class="form-control" placeholder="First Name" required>
+                            <input onkeydown="return /[a-z]/i.test(event.key)" onchange="mycamel1()"   type="text" id="registerName" name="fname" class="form-control" placeholder="First Name" required>
                         </div>
             
                         <div class="form-outline mb-4">
                             <label class="form-label" for="registerLName">Last Name</label>
-                            <input type="text" id="registerLName" name="last_name" class="form-control" placeholder="Last Name">
+                            <input onkeydown="return /^[a-zA-Z\s]*$/i.test(event.key)" onchange="mycamel()"  type="text" id="registerLName" name="lname" class="form-control" placeholder="Last Name">
                         </div>
                         
-                        <div class="form-outline mb-4">
-                          <label class="form-label" for="registerA2">Address Line1</label>
-                          <input type="text" id="registerA2" name="adrone" class="form-control" placeholder="Houseno/Flatno/Apartment">
-                      </div>
-                      <div class="form-outline mb-4">
-                        <label class="form-label" for="registerA3">Address Line 2</label>
-                        <input type="text" id="registerA3" name="adrtwo" class="form-control" placeholder="Last Name">
-                    </div>
-                    <div class="form-outline mb-4">
-                      <label class="form-label" for="registerA4">Address Line 3</label>
-                      <input type="text" id="registerA4" name="adrthree" class="form-control" placeholder="Last Name">
-                  </div>
+
 
                         <!-- Username input -->
                         <div class="form-outline mb-4">
                           <label class="form-label" for="registerUsername">Username</label>
-                          <input type="text" id="registerUsername" name="username" class="form-control" placeholder="Username" required>
+                          <input  type="text" id="registerUsername" name="uname" class="form-control" placeholder="Username" required>
                         </div>
 
-                        <div class="form-outline mb-4 ">
-                          <label class="form-label" for="phone">Phone Number</label>
-                          <input type="number" id="phone" name="mobile" class="form-control" placeholder="Enter your mobile number" required>
-                        </div>
                   
                         <!-- Email input -->
                         <div class="form-outline mb-4">
                           <label class="form-label" for="registerEmail">Email</label>
                           <input type="email" id="registerEmail" name="email" class="form-control" placeholder="Email" required>
                         </div>
-                  
-                        <!-- Password input -->
-                        <div class="form-outline mb-4">
-                          <label class="form-label" for="registerPassword">Password</label>
-                          <input type="password" id="registerPassword" name="password" class="form-control" placeholder="Strong Password" required>
+                        
+                        <div class="form-outline mb-4 ">
+                          <label class="form-label" for="phone">Phone Number</label>
+                          <input  type="tel" id="myform_phone" pattern="[1-9]{1}[0-9]{9}|[0-9]{5}-[0-9]{5}" name="mob" class="form-control" placeholder="Enter your  number" required>
                         </div>
-                  
-                        <!-- Repeat Password input -->
-                        <div class="form-outline mb-4">
-                          <label class="form-label" for="registerRepeatPassword">Repeat password</label>
-                          <input type="password" id="registerRepeatPassword" name="cpassword" class="form-control" placeholder="Confirm Password" required>
+
+                        <div class="form-outline mb-4 ">
+                          <label class="form-label" for="phone">Alternate Phone Number</label>
+                          <input  type="tel" id="myform_phone1" pattern="[1-9]{1}[0-9]{9}|[0-9]{5}-[0-9]{5}" name="amob" class="form-control" placeholder="Enter alternate number">
                         </div>
+
             
                         <!-- Radio Gender input -->
-                        <div class="form-outline mb-4 text-center" >
-                            <input type="radio" name="gender" id="male" value="Male">
+                        <div class="form-outline mb-2 text-center" >
+                            <input type="radio" name="gender" id="male" value="Male" >
                             <label for="male">Male</label>
                             <input type="radio" name="gender" id="female" value="Female">
                             <label for="female">Female</label>
                             <input type="radio" name="gender" id="Other" value="Female">
                             <label for="other">Other</label>
                         </div>
-                        <div class="text-center">
-                        <input class="form-check-input ml-5" type="checkbox" value="" id="registerCheck"
+
+
+                        <div class="text-center  mb-3">
+                        <input class="form-check-input" type="checkbox" value="" id="registerCheck"
                             aria-describedby="registerCheckHelpText" required />
                             I have read and agree to the terms
                           
@@ -340,6 +371,63 @@
     	map.resize();
 		});
 	</script>
+
+
+<script> 
+function mycamel1() {
+  const fn = document.getElementById("registerName").value.toLowerCase();
+  document.getElementById("registerName").value = fn[0].toUpperCase() + fn.substring(1);
+  
+}
+
+function mycamel() {
+  const fn = document.getElementById("registerLName").value.toLowerCase();
+  let text = "";
+  var camelen = fn;
+  var stringArray = camelen.split(/(\s+)/);
+  for (var i = 0; i < stringArray.length; i++) {
+    text += stringArray[i][0].toUpperCase() + stringArray[i].substring(1);
+    //Do something
+  }
+  document.getElementById("registerLName").value = text;
+  console.log(text);
+  
+}
+
+
+var phone_input = document.getElementById("myform_phone");
+phone_input.addEventListener('input', () => {
+  phone_input.setCustomValidity('');
+  phone_input.checkValidity();
+});
+
+phone_input.addEventListener('invalid', () => {
+  if(phone_input.value === '') {
+    phone_input.setCustomValidity('Enter phone number!');
+  } else {
+    phone_input.setCustomValidity('Enter phone number in this format: 1234567890');
+  }
+});
+
+var phone_input = document.getElementById("myform_phone1");
+phone_input.addEventListener('input', () => {
+  phone_input.setCustomValidity('');
+  phone_input.checkValidity();
+});
+
+phone_input.addEventListener('invalid', () => {
+  if(phone_input.value === '') {
+    phone_input.setCustomValidity('Enter phone number!');
+  } else {
+    phone_input.setCustomValidity('Enter phone number in this format: 1234567890');
+  }
+});
+
+
+
+</script>
+
+  
 
     <script src="{% static 'home/js/jquery.min.js' %}"></script>
     <script src="{% static 'home/js/popper.js' %}"></script>

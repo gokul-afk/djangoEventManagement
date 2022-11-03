@@ -25,21 +25,27 @@
 {% endblock %}
 
 {% block topmenu %}
-<li class="nav-item ">
-    <a class="nav-link" href="{% url 'home' %}">Home</a>
-</li>
 <li class="nav-item">
     <a class="nav-link" href="{% url 'catlist' 'All' %}">Food</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="#">Menu</a>
+    <a class="nav-link" href="{% url 'menus' 0 %}">Menu</a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" href="#">Customize</a>
-</li>
+
+{% if request.user.is_authenticated %}
 <li class="nav-item active">
-    <a class="nav-link" href="{% url 'showcart' request.user.id %}">Cart</a>
+    <a class="nav-link" 
+    href="{% url 'showcart' request.user.id %}"
+
+>Cart</a>
 </li>
+{%endif%}
+{% if request.user.is_authenticated %}
+<li class="nav-item">
+    <a class="nav-link" 
+     href="{% url 'showorder' request.user.id %}" >Orders</a>
+</li>
+{%endif%}
 {% endblock %}
 
 
@@ -68,12 +74,12 @@
                     <p class="card-text pt-0">Rs.{{cart.product.price}}</p> 
                     <div class="row me">
                         <div class="col-2 ">
-                            <div class="card-text ">Size:</div>
-                            <div class="card-text ">Description:</div>
+                            <div class="card-text ">Catgory:</div>
+                            <div class="card-text ">Event:</div>
                         </div>
                         <div class="col-3 ">
-                            <div class="card-text pt-0">M</div>
-                            <div class="card-text pt-0">AA</div>
+                            <div class="card-text pt-0">{{cart.product.category.name}}</div>
+                            <div class="card-text pt-0">{{cart.event.name}}</div>
                         </div>
                         <div class="col-2 ">
                             <div class="card-text pt-0">Quatity:</div>
@@ -85,7 +91,7 @@
                         </div>
             
                     </div>  
-                    <a class="nav-link heart " href="#">
+                    <a class="nav-link heart " href="{% url 'deletecart' cart.id %}">
                       <i class="fa fa-trash-o text-dark" style="font-size:30px;position:relative;top:-100px;right:-600px; "></i>
                     </a>
                     <a class="nav-link heart text-dark" href="#">
@@ -119,7 +125,7 @@
         </div>
         </div>
     
-    <a href="#" class="btn btn-primary" style="margin-top:150px; right:10px; height:50px;padding-top: 10px;">
+    <a href="{% url 'order' request.user.id %}" class="btn btn-primary" style="margin-top:150px; right:10px; height:50px;padding-top: 10px;">
 
       Continue to checkout</a>
     </div>

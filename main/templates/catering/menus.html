@@ -1,0 +1,1271 @@
+{% extends 'index.html' %}
+
+
+
+{% block head %}
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
+<style>
+
+</style>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet"
+    href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+
+{% endblock %}
+
+{% block topmenu %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'catlist' 'All' %}">Food</a>
+</li>
+<li class="nav-item active">
+    <a class="nav-link" href="{% url 'menus' 0 %}">Menu</a>
+</li>
+
+{% if request.user.is_authenticated %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'showcart' request.user.id %}">Cart</a>
+</li>
+{%endif%}
+{% if request.user.is_authenticated %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'showorder' request.user.id %}">Orders</a>
+</li>
+{%endif%}
+{% endblock %}
+
+{% block content %}
+
+
+<div class="row d-flex justify-content-center">
+
+    <!--Grid column-->
+    <div class="p-2 m-1 bg-light justify-content-center w-100">
+
+
+
+        <div class="container  " style="width:100%;">
+
+            <ul class="nav nav-pills nav-justified nav-pills-primary mb-3" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist" aria-expanded="false">
+                        Standard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#link2" role="tablist" aria-expanded="false">
+                        Classy
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#link3" role="tablist" aria-expanded="false">
+                        Elegant
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#link4" role="tablist" aria-expanded="false">
+                        Executive
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#link5" role="tablist" aria-expanded="false">
+                        Grand
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content tab-space">
+                <div class="tab-pane active" id="link1" aria-expanded="true">
+                    <form method='post' class='post-form form' action="{% url 'menucart' 'standard' %}">
+                        {% csrf_token %}
+
+
+
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Appetizers</h2>
+                            <label class="form-label col-6" for="loginName">Welcome drinks</label>
+                            <label class="form-label col-6 text-right" for="loginName">- select 2</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="drink1" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="drink2" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">First Course</h2>
+                            <label class="form-label col-6" for="loginName">Breads</label>
+                            <label class="form-label col-6" for="loginName">Non-Veg dish(chicken)</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="bread1" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Breads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="chicken1" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Chicken" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Main Course</h2>
+                            <label class="form-label col-6" for="loginName">Rice/ Noodles</label>
+                            <label class="form-label col-6" for="loginName">Non-Veg dish(Beef/ Pork)</label>
+                            <div class="col-6 form-outline mt-1 ">
+                                <select class="form-control" name="rice1" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Rice" or cat.category.name == "Noodles" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1 ">
+                                <select class="form-control" name="beef1" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Beef" or cat.category.name == "Pork" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-12 mt-3" for="loginName">Fish</label>
+                            <div class="col-12 form-outline mt-1  ">
+                                <select class="form-control" name="fish1" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Fish" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6 mt-3" for="loginName">Veg dish</label>
+                            <label class="form-label col-6 text-right mt-3" for="loginName">- select 2</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="veg1" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Vegetarian" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="veg2" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Vegetarian" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6 mt-3" for="loginName">Salads </label>
+                            <label class="form-label col-6 text-right mt-3" for="loginName">- select 3</label>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="salad1" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="salad2" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {{% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="salad3" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Desserts</h2>
+                            <label class="form-label col-12" for="loginName">select 1</label>
+                            <div class="col-12 form-outline mt-1  ">
+                                <select class="form-control" name="dessert1" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Desserts" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <label class="form-label col-12" for="loginName">Associated Event</label>
+                            <div class="col-12 form-outline mt-1  ">
+                                <select class="form-control" name="event" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% if Eventall == 0 %}
+                                    {% for cat in Event %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>                                    
+                                    {% endfor %}
+                                    {% else %}
+                                    <option value="{{ Event.id }}">{{ Event.name}}</option>
+                                    {% endif %}
+                                    <option value="none">No events</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+
+                        <div class="text-center col-12">
+                            <!-- Submit button -->
+                            <button type="submit" class="btn btn-primary btn-block mb-4">Add to Cart </button>
+                        </div>
+                    </form>
+                </div>
+
+                
+
+                <div class="tab-pane" id="link2" aria-expanded="false">
+                    <form method='post' class='post-form form' action="{% url 'login' %}">
+                        {% csrf_token %}
+
+
+
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Appetizers</h2>
+                            <label class="form-label col-4" for="loginName">Welcome drinks x3</label>
+                            <label class="form-label col-4 " for="loginName">second drink</label>
+                            <label class="form-label col-4  " for="loginName">third drink</label>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">First Course</h2>
+                            <label class="form-label col-4" for="loginName">Breads x2</label>
+                            <label class="form-label col-4 " for="loginName">select one more bread item</label>
+                            <label class="form-label col-4" for="loginName">Non-Veg dish(chicken)</label>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Breads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Breads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Chicken" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Main Course</h2>
+                            <label class="form-label col-6" for="loginName">Rice/ Noodles</label>
+                            <label class="form-label col-6" for="loginName">Non-Veg dish(Beef/ Pork)</label>
+                            <div class="col-6 form-outline mt-1 ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Rice" or cat.category.name == "Noodles" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1 ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Beef" or cat.category.name == "Pork" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-12 mt-3" for="loginName">Fish</label>
+                            <div class="col-12 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Fish" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6 mt-3" for="loginName">Veg dish x2</label>
+                            <label class="form-label col-6 mt-3" for="loginName">select one more vegetarian dish</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Vegetarian" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Vegetarian" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6 mt-3" for="loginName">Salads x4</label>
+                            <label class="form-label col-6 text-right mt-3" for="loginName">second salad</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6 mt-1" for="loginName">third salad</label>
+                            <label class="form-label col-6  mt-1 text-right" for="loginName">last salad</label>
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Desserts</h2>
+                            <label class="form-label col-6" for="loginName">first</label>
+                            <label class="form-label col-6" for="loginName">second</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Desserts" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Desserts" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <label class="form-label col-12" for="loginName">Associated Event</label>
+                            <div class="col-12 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% if Eventall == 0 %}
+                                    {% for cat in Event %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>                                    
+                                    {% endfor %}
+                                    {% else %}
+                                    <option value="{{ cat.id }}">{{ Event.name}}</option>
+                                    {% endif %}
+                                    <option value="none">No events</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="text-center">
+                            <!-- Submit button -->
+                            <button type="submit" class="btn btn-primary btn-block mb-4">Add to Cart </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="tab-pane" id="link3" aria-expanded="false">
+                    <form method='post' class='post-form form' action="{% url 'login' %}">
+                        {% csrf_token %}
+
+
+
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Appetizers</h2>
+                            <label class="form-label col-4" for="loginName">Welcome drinks x3</label>
+                            <label class="form-label col-4 " for="loginName">second drink</label>
+                            <label class="form-label col-4  " for="loginName">third drink</label>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">First Course</h2>
+                            <label class="form-label col-6" for="loginName">Breads x2</label>
+                            <label class="form-label col-6 " for="loginName">select one more bread item</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Breads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Breads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6 mt-3" for="loginName">Non-Veg dish(chicken)</label>
+                            <label class="form-label col-6 mt-3" for="loginName">Non-Veg dish(Mutton/ Duck)</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Chicken" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Mutton" or cat.category.name == "Duck" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Main Course</h2>
+                            <label class="form-label col-6" for="loginName">Rice/ Noodles</label>
+                            <label class="form-label col-6" for="loginName">Non-Veg dish(Beef/ Pork)</label>
+                            <div class="col-6 form-outline mt-1 ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Rice" or cat.category.name == "Noodles" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1 ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Beef" or cat.category.name == "Pork" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6 mt-3" for="loginName">Fish x2</label>
+                            <label class="form-label col-6 mt-3" for="loginName">you get one more fish dish</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Fish" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Fish" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6 mt-3" for="loginName">Veg dish x2</label>
+                            <label class="form-label col-6 mt-3" for="loginName">select one more vegetarian dish</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Vegetarian" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Vegetarian" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6 mt-3" for="loginName">Salads x4</label>
+                            <label class="form-label col-6 text-right mt-3" for="loginName">second salad</label>
+                            
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+
+                            <label class="form-label col-6 mt-1" for="loginName">third salad</label>
+                            <label class="form-label col-6  mt-1 text-right" for="loginName">last salad</label>
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Desserts</h2>
+                            <label class="form-label col-6" for="loginName">first</label>
+                            <label class="form-label col-6" for="loginName">second</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Desserts" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Desserts" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <label class="form-label col-12" for="loginName">Associated Event</label>
+                            <div class="col-12 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% if Eventall == 0 %}
+                                    {% for cat in Event %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>                                    
+                                    {% endfor %}
+                                    {% else %}
+                                    <option value="{{ cat.id }}">{{ Event.name}}</option>
+                                    {% endif %}
+                                    <option value="none">No events</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="text-center">
+                            <!-- Submit button -->
+                            <button type="submit" class="btn btn-primary btn-block mb-4">Add to Cart </button>
+                        </div>
+                    </form>
+                    
+                </div>
+
+                <div class="tab-pane" id="link4" aria-expanded="false">
+                    <form method='post' class='post-form form' action="{% url 'login' %}">
+                        {% csrf_token %}
+
+
+
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Appetizers</h2>
+                            <label class="form-label col-6" for="loginName">Welcome drinks x4</label>
+                            <label class="form-label col-6 text-right" for="loginName">second drink</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6  " for="loginName">third drink</label>
+                            <label class="form-label col-6  text-right" for="loginName">last drink</label>
+                        </div>
+                        
+                            
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">First Course</h2>
+                            <label class="form-label col-4" for="loginName">Breads x2</label>
+                            <label class="form-label col-4 " for="loginName">select another bread item</label>
+                            <label class="form-label col-4 " for="loginName">select one more bread item</label>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Breads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Breads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Breads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6 mt-3" for="loginName">Non-Veg dish(chicken)</label>
+                            <label class="form-label col-6 mt-3" for="loginName">Non-Veg dish(Mutton/ Duck)</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Chicken" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Mutton" or cat.category.name == "Duck" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Main Course</h2>
+                            <label class="form-label col-6" for="loginName">Rice/ Noodles x2</label>
+                            <label class="form-label col-6" for="loginName">one more</label>
+                            <div class="col-6 form-outline mt-1 ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Rice" or cat.category.name == "Noodles" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1 ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Rice" or cat.category.name == "Noodles" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6" for="loginName">Non-Veg dish(Beef/ Pork) x2</label>
+                            <label class="form-label col-6" for="loginName"> select another(Beef/ Pork)</label>
+                            <div class="col-6 form-outline mt-1 ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Beef" or cat.category.name == "Pork" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1 ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Beef" or cat.category.name == "Pork" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6 mt-3" for="loginName">Fish x2</label>
+                            <label class="form-label col-6 mt-3" for="loginName">you get one more fish dish</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Fish" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Fish" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-4 mt-3" for="loginName">Veg dish x2</label>
+                            <label class="form-label col-4 mt-3" for="loginName">select another vegetarian dish</label>
+                            <label class="form-label col-4 mt-3" for="loginName">select one more vegetarian dish</label>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Vegetarian" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Vegetarian" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div><div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Vegetarian" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6 mt-3" for="loginName">Salads x4</label>
+                            <label class="form-label col-6 text-right mt-3" for="loginName">second salad</label>
+                            
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+
+                            <label class="form-label col-6 mt-1" for="loginName">third salad</label>
+                            <label class="form-label col-6  mt-1 text-right" for="loginName">last salad</label>
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Desserts</h2>
+                            <label class="form-label col-4" for="loginName">first</label>
+                            <label class="form-label col-4" for="loginName">second</label>
+                            <label class="form-label col-4" for="loginName">last</label>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Desserts" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Desserts" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Desserts" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            
+
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <label class="form-label col-12" for="loginName">Associated Event</label>
+                            <div class="col-12 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% if Eventall == 0 %}
+                                    {% for cat in Event %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>                                    
+                                    {% endfor %}
+                                    {% else %}
+                                    <option value="{{ cat.id }}">{{ Event.name}}</option>
+                                    {% endif %}
+                                    <option value="none">No events</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <!-- Submit button -->
+                            <button type="submit" class="btn btn-primary btn-block mb-4">Add to Cart </button>
+                        </div>
+                    </form>
+                    
+                </div>
+
+                <div class="tab-pane" id="link5" aria-expanded="false">
+                    <form method='post' class='post-form form' action="{% url 'login' %}">
+                        {% csrf_token %}
+
+
+
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Appetizers</h2>
+                            <label class="form-label col-4" for="loginName">Welcome drinks x6</label>
+                            <label class="form-label col-4 text-center" for="loginName">second drink</label>
+                            <label class="form-label col-4 text-right" for="loginName">third drink</label>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Drinks" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-4  " for="loginName">fourth drink</label>
+                            <label class="form-label col-4  text-center" for="loginName">fifth drink</label>
+                            <label class="form-label col-4  text-right" for="loginName">last drink</label>
+                        </div>
+                        
+                            
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">First Course</h2>
+                            <label class="form-label col-4" for="loginName">Breads x2</label>
+                            <label class="form-label col-4 " for="loginName">select another bread item</label>
+                            <label class="form-label col-4 " for="loginName">select one more bread item</label>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Breads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Breads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Breads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-4 mt-3" for="loginName">Non-Veg dish(chicken)</label>
+                            <label class="form-label col-4 mt-3" for="loginName">Non-Veg dish(Mutton)</label>
+                            <label class="form-label col-4 mt-3" for="loginName">Non-Veg dish(Duck)</label>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Chicken" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Mutton" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Duck" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Main Course</h2>
+                            <label class="form-label col-6" for="loginName">Rice/ Noodles x2</label>
+                            <label class="form-label col-6" for="loginName">one more</label>
+                            <div class="col-6 form-outline mt-1 ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Rice" or cat.category.name == "Noodles" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1 ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Rice" or cat.category.name == "Noodles" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6" for="loginName">Non-Veg dish(Beef/ Pork) x2</label>
+                            <label class="form-label col-6" for="loginName"> select another(Beef/ Pork)</label>
+                            <div class="col-6 form-outline mt-1 ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Beef" or cat.category.name == "Pork" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1 ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Beef" or cat.category.name == "Pork" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6 mt-3" for="loginName">Fish x2</label>
+                            <label class="form-label col-6 mt-3" for="loginName">you get one more fish dish</label>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Fish" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Fish" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-4 mt-3" for="loginName">Veg dish x2</label>
+                            <label class="form-label col-4 mt-3" for="loginName">select another vegetarian dish</label>
+                            <label class="form-label col-4 mt-3" for="loginName">select one more vegetarian dish</label>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Vegetarian" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Vegetarian" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div><div class="col-4 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Vegetarian" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <label class="form-label col-6 mt-3" for="loginName">Salads x4</label>
+                            <label class="form-label col-6 text-right mt-3" for="loginName">second salad</label>
+                            
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Salads" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+
+                            <label class="form-label col-6 mt-1" for="loginName">third salad</label>
+                            <label class="form-label col-6  mt-1 text-right" for="loginName">last salad</label>
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <h2 class="pl-2 col-12">Desserts</h2>
+                            <label class="form-label col-3" for="loginName">first</label>
+                            <label class="form-label col-3" for="loginName">second</label>
+                            <label class="form-label col-3" for="loginName">third</label>
+                            <label class="form-label col-3" for="loginName">last</label>
+                            <div class="col-3 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Desserts" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-3 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Desserts" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-3 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Desserts" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-3 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% for cat in food %}
+                                    {% if cat.category.name == "Desserts" %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>
+                                    {% endif %}{% endfor %}
+                                </select>
+                            </div>
+                            
+
+                        </div>
+
+                        <div class="col-12 row form-outline mb-4">
+                            <label class="form-label col-12" for="loginName">Associated Event</label>
+                            <div class="col-12 form-outline mt-1  ">
+                                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                                    {% if Eventall == 0 %}
+                                    {% for cat in Event %}
+                                    <option value="{{ cat.id }}">{{ cat.name}}</option>                                    
+                                    {% endfor %}
+                                    {% else %}
+                                    <option value="{{ cat.id }}">{{ Event.name}}</option>
+                                    {% endif %}
+                                    <option value="none">No events</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <!-- Submit button -->
+                            <button type="submit" class="btn btn-primary btn-block mb-4">Add to Cart </button>
+                        </div>
+                    </form>
+                    
+                </div>
+
+            </div>
+        </div>
+        <!--Grid column-->
+
+    </div>
+
+
+
+
+
+
+    {% endblock %}

@@ -1,0 +1,179 @@
+{% extends 'index.html' %}
+
+{% block topmenu %}
+<li class="nav-item">
+    <a class="nav-link" href="#">About</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">Contact</a>
+</li>
+{% endblock %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+{% if request.user.is_staff %}
+<h2 class="mb-4">Dashboard</h2>
+<div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card shadow h-100 py-2" style="border-left:solid #dc3545 5px;">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col-9 mr-2 ">
+                        <div class="text-xs  font-weight-bold  accordion text-danger text-uppercase mb-3" style="font-size:20px">
+                            Upcoming Events</div>
+                    </div>
+                        <div class="col-2 text-right ">
+                            
+                                <i class="bx bx-calendar text-gray-300" style="font-size:40px;position:relative;top:-15px;left:20px;color:black;"></i>
+                            
+                        </div>
+                    <div class="col mr-2 ">
+                        <div class="text-xs font-weight-bold  mb-1">
+                            This Week</div>
+                        <div class="h5 mb-0 font-weight-bold  text-gray-800">{{seven}}</div>
+                    </div>
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold  mb-1">
+                            50 Days</div>
+                        <div class="h5 mb-0 font-weight-bold  text-gray-800">{{Upcoming}}</div>
+                    </div>
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold mb-1">
+                            6 Months</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{Upcomingyears}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-muted py-0  ">
+                <a href="{% url 'events' sort='id' st='Upcoming' %}" style="color:black" >
+                more info <i class="bx bxs-chevrons-right text-gray-300 pt-2" style="font-size:15px;position:relative;top: 2px;"></i>
+            </a>
+              </div>
+        </div>
+    </div>
+    
+    
+
+<div class="col-xl-3 col-md-6 mb-4">
+    <div class="card shadow h-100 py-2" style="border-left:solid #28a745 5px;">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col-8 mr-2">
+                    <div class="text-xs  font-weight-bold  accordion text-success text-uppercase mb-3" style="font-size:20px">
+                        Progress</div>
+                </div>
+                    <div class="col-3 text-right ">
+                        
+                            <i class="bx bx-calendar-event text-gray-300" style="font-size:40px;position:relative;top:-15px;left:20px;color:black;"></i>
+                        
+                    </div>
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold mb-1">
+                        Ongoing</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{Ongoing}}</div>
+                </div>
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold  mb-1">
+                        {% now "F" %} <i class="bx bx-check-double" style="font-size:20px;color:green;position:relative;top:5px;"></i></div>
+                    <div class="h5 mb-0 font-weight-bold  text-gray-800">{{Completed}}</div>
+                </div>
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold  mb-1">
+                        All Time  <i class="bx bx-check-double" style="font-size:20px;color:green;position:relative;top:5px;"></i></div>
+                    <div class="h5 mb-0 font-weight-bold  text-gray-800">{{Completedall}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-muted py-0  ">
+            <a href="{% url 'events' sort='id' st='Ongoing' %}" style="color:black" >
+            more info <i class="bx bxs-chevrons-right text-gray-300 pt-2" style="font-size:15px;position:relative;top: 2px;"></i>
+        </a>
+          </div>
+    </div>
+</div>
+
+<div class="col-xl-3 col-md-6 mb-4">
+    <div class="card shadow h-100 py-2" style="border-left:solid #17a2b8 5px;">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col-8 mr-2">
+                    <div class="text-xs  font-weight-bold  accordion text-info text-uppercase mb-3" style="font-size:20px">
+                        Users</div>
+                </div>
+                    <div class="col-3 text-right ">
+                        
+                            <i class="bx bx-user-pin text-gray-300" style="font-size:40px;position:relative;top:-15px;left:20px;color:black;"></i>
+                        
+                    </div>
+                <div class="col-4 mr-2">
+                    <div class="text-xs font-weight-bold  mb-1">
+                        Managers</div>
+                    <div class="h5 mb-0 font-weight-bold  text-gray-800">{{managers}}</div>
+                </div>
+                <div class="col-3 mr-2 ">
+                    <div class="text-xs font-weight-bold  mb-1">
+                        Users</div>
+                    <div class="h5 mb-0 font-weight-bold  text-gray-800">{{users}}</div>
+                </div>
+                <div class="col-4 r">
+                    <div class="text-xs font-weight-bold  mb-1">
+                        Users Today </div>
+                    <div class="h5 mb-0 font-weight-bold  text-gray-800">{{newUserToday}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-muted py-0  ">
+            <a href="#" style="color:black" >
+            more info <i class="bx bxs-chevrons-right text-gray-300 pt-2" style="font-size:15px;position:relative;top: 2px;"></i>
+        </a>
+          </div>
+    </div>
+</div>
+    
+<div class="col-xl-3 col-md-6 mb-4">
+    <div class="card shadow h-100 py-2" style="border-left:solid #494ca2 5px;">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col-9 mr-2">
+                    <div class="text-xs  font-weight-bold  accordion text-uppercase mb-3" style="font-size:20px;color:#494ca2">
+                        Pending Requests</div>
+                </div>
+                    <div class="col-2 text-right ">
+                        
+                            <i class="bx bx-info-square text-gray-300" style="font-size:40px;position:relative;top:-15px;left:20px;color:black;"></i>
+                        
+                    </div>
+                <div class="col-3 mr-2  ">
+                    <div class="text-xs font-weight-bold  mb-1">
+                        Events </div>
+                    <div class="h5 mb-0 font-weight-bold  text-gray-800">{{schedule}}</div>
+                </div>
+                <div class="col mr-2  ">
+                    <div class="text-xs font-weight-bold  mb-1">
+                        Caterings</div>
+                    <div class="h5 mb-0 font-weight-bold  text-gray-800">{{orders}}</div>
+                </div>
+                <div class="col   ">
+                    <div class="text-xs font-weight-bold  mb-1">
+                        Order users</div>
+                    <div class="h5 mb-0 font-weight-bold  text-gray-800">{{orderuser}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-muted py-0  ">
+            <a href="#" style="color:black" >
+            more info <i class="bx bxs-chevrons-right text-gray-300 pt-2" style="font-size:15px;position:relative;top: 2px;"></i>
+        </a>
+          </div>
+    </div>
+</div>
+
+</div>
+{% endif %}
+{%else%}
+<h1>Nothing to show here</h1>
+
+{% endif %}
+
+
+{% endblock %}

@@ -74,7 +74,7 @@
     <div class="col-12 text-left">
     <div class="collapse" id="collapsecategory">
         <div class="card card-body">
-            <form action="{% url 'addManager' %}" method="post" class="form pt-5 pb-5" enctype="multipart/form-data" style="width: 50%; margin-left:25%">
+            <form action="{% url 'addevent' %}" method="post" class="form pt-5 pb-5" enctype="multipart/form-data" style="width: 50%; margin-left:25%">
                 {% csrf_token %}
                 <div class="row">
                 <div class="col-12 ">
@@ -95,10 +95,10 @@
                 </div> 
                 <div class="col-6 mt-4">
                 <label class="form-label" for="loginName">Manager</label>
-                <select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                <select class="form-control" name="man" style="border: 1px solid rgba(0,0,0,.5);">
                     <option value="same">Same as Category head</option>
                     {% for staff in staffs %}
-                    <option value="{{ staff.id }}">{{ staff.first_name}} {{ staff.last_name}}</option>
+                    <option value="{{ staff.user_name }}">{{ staff.first_name}} {{ staff.last_name}}</option>
                     {% endfor %}
                 </select>
                 </div> 
@@ -117,17 +117,6 @@
                     <input type="text" name="venue" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
                 </div>
 
-                <div class="col-12">
-                    <label class="form-label mt-2" for="loginName">Location</label>
-                    <input type="text" name="loc" class="form-control" placeholder="Category Name" style="border: 1px solid rgba(0,0,0,.5);">
-                </div>
-
-                <div class="col-12 ">
-                    <section class="map_box_container ">
-                        <!--MAP-->
-                      <div id='map' style="height:300px" class=" mt-4"><hr></div>
-                    </section>
-                </div>
 
 
  
@@ -139,10 +128,7 @@
                 
 
 
-                <div class="col-6 mt-2">
-                <label class="form-label mt-2" for="loginName">Event Image</label>
-                <input type="file" name="image" class="form-control " accept="image/*">
-                </div>
+
                 </div>
 
                 <div class="row pt-3">
@@ -174,7 +160,7 @@
                 <th><a href="{% url 'events' 'category' st %}" style="color:black">Category</a></th>
                 <th width="200px">Venue</th>
                 <th><a href="{% url 'events' 'start_date' st %}" style="color:black">Dates</a></th>
-                <th><a href="{% url 'events' 'maximum_attende' st %}" style="color:black">Attendee</a></th>
+                <th width="100px"><a href="{% url 'events' 'maximum_attende' st %}" style="color:black">Attendee</a></th>
                 <th><a href="{% url 'events' 'manager' st %}" style="color:black">Manager</a></th>
                 <th><a href="{% url 'events' 'scheduled_status' st %}" style="color:black">Scheduled</a></th>
                 <th><a href="{% url 'events' 'status' st %}" style="color:black">Status</a></th>
@@ -214,16 +200,89 @@
                 <td>{{i.status}}</td>
 
                 <td>
-                    <a href="#"><i class="bx bx-edit-alt" style="font-size:30px;color:#28a745"></i></a>
+                    <a data-toggle="collapse" href="#collapseExample{{i.id}}" role="button" aria-expanded="false" aria-controls="collapseExample"><i class="bx bx-edit-alt" style="font-size:30px;color:#28a745"></i></a>
                     
                 </td>
+                
+                
                 {%if request.user.is_superuser %}
                     <td>
-                        <a href="#"><i class="bx bx-trash" style="font-size:30px;color:#dc3545"></i></a>
+                        <a href="{% url 'deleteevent' i.id %}"><i class="bx bx-trash" style="font-size:30px;color:#dc3545"></i></a>
                     </td>
                 {% endif %}
             </tr>
             {% endif %}
+            <tr class="collapse" id="collapseExample{{i.id}}">
+                <form action="{% url 'editevent' i.id %}" method="post" class="form pt-5 pb-5">
+                    {% csrf_token %}
+                <td><input type="text" name="name" class="form-control" placeholder="Category Name"
+                    style="border: 1px solid rgba(0,0,0,.5);" value="{{i.name}}"></td>
+                <td ><select class="form-control" name="sel" style="border: 1px solid rgba(0,0,0,.5);">
+                    {% for cat in Categories %}
+                    <option {% if i.category.id == cat.id %} selected
+                    {% endif %} value="{{ cat.id }}">{{ cat.code }}</option>
+                    {% endfor %}
+                </select></td>
+
+                <td><input type="text" name="venue" class="form-control" placeholder="Category Name"
+                style="border: 1px solid rgba(0,0,0,.5);" value="{{i.venue}}"></td>
+                
+                <td class="text-center"><input type="date" name="sdate" class="form-control" placeholder="Category Name"
+                    style="border: 1px solid rgba(0,0,0,.5);" value="{{ i.start_date|date:'Y-m-d' }}">
+                    to
+                    <input type="date" name="edate" class="form-control" placeholder="Category Name"
+                style="border: 1px solid rgba(0,0,0,.5);" value="{{ i.end_date|date:'Y-m-d' }}">
+                </td>
+                <td><input type="number" name="maxattend" class="form-control" 
+                    style="border: 1px solid rgba(0,0,0,.5);" value="{{i.maximum_attende}}"></td>
+                
+                
+                <td>
+                        <select class="form-control" name="man" style="border: 1px solid rgba(0,0,0,.5);">
+                            <option value="same">Same as Category head</option>
+                            {% for man in staffs %}
+                        <option {% if i.manager.id == man.id %} selected
+                    {% endif %} value="{{man.id}}">{{ man.first_name }}{{ man.last_name }}</option>
+                    {% endfor %}
+                </td>
+                
+                <td>
+                    <select class="form-control" name="scheduled" style="border: 1px solid rgba(0,0,0,.5);">
+                        <option {% if i.scheduled_status %} selected
+                    {% endif %} value=1>Scheduled</option>
+                        <option {% if not i.scheduled_status %}  selected
+                    {% endif %} value=0>Not Scheduled</option>
+                    </select>
+                </td>
+                <td><select class="form-control" name="status" style="border: 1px solid rgba(0,0,0,.5);">
+                    <option {% if i.status == "Requested" %} selected
+                {% endif %} value="Requested">Requested</option>
+                <option {% if i.status == "Processing" %} selected
+                {% endif %} value="Processing">Processing</option>
+                
+                <option {% if i.status == "Completed"%} selected
+                {% endif %} value="Completed">Completed</option>
+                <option {% if i.status == "Upcoming"%} selected
+                {% endif %} value="Upcoming">Upcoming</option>
+                <option {% if i.status == "Ongoing"%} selected
+                {% endif %} value="Ongoing">Ongoing</option>
+                <option {% if i.status == "Cancelled"%} selected
+                {% endif %} value="Cancelled">Cancelled</option>
+            </select></td>
+
+                <td>
+
+                    <button type="submit" class="btn btn-outline-dark btn-block ">Submit</button>
+                </td>
+                
+                
+                {%if request.user.is_superuser %}
+                    <td>
+                        <a class="btn btn-outline-danger btn-block " data-toggle="collapse" href="#collapseExample{{i.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">cancel</a>
+                    </td>
+                {% endif %}
+            </form>
+            </tr>
             {% endfor %}
         </tbody>
     </table>   

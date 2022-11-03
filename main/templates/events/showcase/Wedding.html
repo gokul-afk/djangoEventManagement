@@ -1,0 +1,102 @@
+{% extends 'index.html' %}
+
+
+
+{% block head %}
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
+<style>
+
+</style>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+
+<style>
+    {% for i in images %}
+    {% if i.type == 'cover' %}
+    .cover {
+        flex: 1;
+        height: 400px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('{{ i.image.url }}');
+    }
+    {% else %}
+    .item-{{i.id}}{
+        flex: 1;
+        height: 350px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('{{ i.image.url }}');
+                
+    }
+    {% endif %}
+    
+    
+    {% endfor %}
+
+</style>
+
+{% endblock %}
+
+{% block topmenu %}
+<li class="nav-item active">
+    <a class="nav-link" href="{% url 'events' 'id' 'Up' %}">Events</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'showcat' %}">Categories</a>
+</li>
+<li class="nav-item ">
+    <a class="nav-link" href="{% url 'showmanagers' %}">Managers</a>
+</li>
+{% endblock %}
+
+{% block content %}
+
+
+
+<div class="row">
+    <div class="container  ">
+        <div class="col-12 cover ">
+        </div>  
+    
+    <div class="col-12 row">    
+        <div class="col-9 mt-5  ">
+            <h3>{{event.name}}</h3>
+            <h5> {{event.category.name}}</h5>
+        </div>
+        
+        <div class="col-3 text-right mt-5  ">
+            <h3>{{event.start_date}}</h3>   
+        </div>
+    </div>
+
+    <div class="col-12 mt-5 ">
+        <p>{{event.description}}</p>
+    </div>
+    <div class="col-12 row">   
+    {%for img in all %}
+        {% if not i.type == 'cover' %}
+        <div class=" col-sm-6 col-lg-4 col-xl-6  d-inline-block p-1  ">
+        <div class="item-{{img.id}} "></div>
+                
+        </div>
+        
+    {% endif %}{% endfor %}
+    </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}

@@ -25,29 +25,27 @@
 {% endblock %}
 
 {% block topmenu %}
-<li class="nav-item ">
-    <a class="nav-link" href="{% url 'home' %}">Home</a>
-</li>
 <li class="nav-item active">
     <a class="nav-link" href="{% url 'catlist' 'All' %}">Food</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="#">Menu</a>
+    <a class="nav-link" href="{% url 'menus' 0 %}">Menu</a>
 </li>
+
+{% if request.user.is_authenticated %}
 <li class="nav-item">
-    <a class="nav-link" href="#">Customize</a>
+    <a class="nav-link" 
+    href="{% url 'showcart' request.user.id %}"
+
+>Cart</a>
 </li>
+{%endif%}
+{% if request.user.is_authenticated %}
 <li class="nav-item">
-    <a class="nav-link" {% if request.user.is_authenticated %}
-    href="{% url 'showcart' request.user.id %"
-{%else%}
-    href="#"
-    data-target="#exampleModalCenter"
-    role="button"
-    aria-expanded="false"
-    data-toggle="modal"
-{%endif%} >Cart</a>
+    <a class="nav-link" 
+     href="{% url 'showorder' request.user.id %}" >Orders</a>
 </li>
+{%endif%}
 {% endblock %}
 
 
@@ -119,7 +117,32 @@
             </div>
 
             </div>
+
+            <div class="col-12 row form-outline mt-4">
+                <label class="form-label col-12" for="loginName">Associated Event</label>
+                <div class="col-12 form-outline mt-1  ">
+                    <select class="form-control" name="event" style="border: 1px solid rgba(0,0,0,.5);">
+                        
+                        {% for cat in Event %}
+                        <option value="{{ cat.id }}">{{ cat.name}}</option>                                    
+                        {% endfor %}
+                        
+                        <option value="none">Create new event</option>
+                    </select>
+                </div>
+            </div>
+
+            {% if request.user.is_authenticated %}
+            
             <button type="submit" class=" btn btn-primary btn btn-block py-1 mt-4 " >Add to Cart</button>
+            {%else%}
+            <a class=" btn btn-primary btn btn-block py-1 mt-4 " href="#"
+      data-target="#exampleModalCenter"
+      role="button"
+      aria-expanded="false"
+      data-toggle="modal">Add to Cart</a>
+            {%endif%}
+
         </form>
 
     </div>

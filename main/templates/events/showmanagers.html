@@ -17,12 +17,12 @@
 
 
 <div class="row">
-    <div class="col-10 text-left">
+    <div class="col-9 text-left">
         <h2 class="mb-4">Event Managers</h2>
         
     </div>
     {%if request.user.is_superuser %}
-    <div class="col-2 justify-content-end text-right">
+    <div class="col-3 justify-content-end text-right">
         
         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsecategory" aria-expanded="false" aria-controls="collapseExample">
             Add New Manager
@@ -66,7 +66,7 @@
                     </div>
 
                 <div class="col-6 mt-2 form-outline">
-                    <label class="form-label mt-2" for="loginName">Email</label>
+                    <label class="form-label mt-2" for="loginName">Gender</label>
                     
                     <div class="form-outline  mt-2" >
                     <input  class="form-" type="radio" name="gender" id="male" value="male">
