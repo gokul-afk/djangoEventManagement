@@ -96,7 +96,14 @@
     </div>
 
     <div class="row pt-3">
+        {% if request.user.is_authenitcated %}
         <button type="submit" class="col-lg-8 btn btn-outline-dark btn-block py-0 ml-3">Submit</button>
+        {% else %}
+        <button type="button" data-target="#exampleModalCenter"
+        role="button"
+        aria-expanded="false"
+        data-toggle="modal" class="col-lg-8 btn btn-outline-dark btn-block py-0 ml-3">Submit</button>
+        {% endif %}
         <div class="col-lg-3 justify-content-end text-right " style="margin-left:30px">
             <a href="#collapsecategory" class="btn btn-primary btn-block btnd">
                 <i class="fa-solid fa-rectangle-xmark"></i> Cancel

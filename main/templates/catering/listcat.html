@@ -72,7 +72,12 @@
 
 <div class="row  mx-3 d-flex justify-content-center mx-5" style="padding-left:100px;padding-right:100px;">
     {% for i in cat %}
-    <a {% if not product %} href="{% url 'catlist' i.name %}" {% else %}  href="{% url 'product' i.name %}" {% endif %}>
+    <a {% if not product %} href="{% url 'catlist' i.name %}" {% elif request.user.is_authenticated %} href="{% url 'product' i.name %}" 
+    {% else %} href="#"
+    data-target="#exampleModalCenter"
+    role="button"
+    aria-expanded="false"
+    data-toggle="modal"   {% endif %}>
 
     <div class=" col-sm-6 col-lg-4 col-xl-3 h-100 d-inline-block p-1 pt-5 gb1">
     <div class="gb3">
@@ -86,10 +91,19 @@
         <h5 class="text-center text-uppercase gb">{{i.name}}</h5></a>
         
     </div>
-    {%if product %}
+    {%if product%}
+    {% if request.user.is_authenticated %}
+    {%if product%}
     <a class="btn btn-outline-dark  d-block" href="{% url 'product' i.name %}">
         Add to Cart</a>
-    {% endif %}
+    {% endif %}{% else %}
+    <a class="btn btn-outline-dark  d-block"  href="#"
+    data-target="#exampleModalCenter"
+    role="button"
+    aria-expanded="false"
+    data-toggle="modal">
+        Add to Cart</a>
+    {% endif %}{% endif %}
 
 
     </div>

@@ -39,6 +39,11 @@
 			<div class="p-4 pt-5">
 				<h1><a href="#" class="logo">Catering & Events</a></h1>
 		<ul class="list-unstyled components mb-5">
+      <li  class="">
+				<a href="{% url 'home' %}"><span class="bx bx-home-alt-2 mr-3"></span>Home</a>
+				
+				
+			</li>
       {% if request.user.is_staff %}
 			<li  class="">
 				<a href="{% url 'dashboard' %}"><span class="bx bx-grid-alt mr-3"></span>Dashboard</a>
@@ -62,31 +67,41 @@
 			</li>
       
       {% endif %}
-      <li>
-        <a href="#">Wedding</a>
-      </li>
-    <li>
-      <a href="#">Corporate</a>
-    </li>
-    <li>
-      <a href="#">Parties</a>
-    </li>
+
     {% if not request.user.is_staff %}
     <li>
-      <a href="{% url 'eventadd' %}">Request Event</a>
+      <a {% if request.user.is_authenticated %}
+      href="{% url 'eventadd' %}"
+          {%else%}
+      href="#"
+      data-target="#exampleModalCenter"
+      role="button"
+      aria-expanded="false"
+      data-toggle="modal"
+          {%endif%}>Request Event</a>
     </li>
     {% endif %}
 			</ul>
 		  </li>
       
 		  <li>
-			<a href="#CatSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="bx bx-images mr-3"></span>Catering</a>
+			<a href="#CatSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="bx bx-food-menu mr-3"></span>Catering</a>
 			<ul class="collapse list-unstyled" id="CatSubmenu">
 			  <li>
 				  <a href="{% url 'catlist' 'All' %}">Foods</a>
 			  </li>
+
         <li>
-				  <a href="{% url 'menus' 0 %}">Menus</a>
+				  <a
+          {% if request.user.is_authenticated %}
+          href="{% url 'menus' 0 %}"
+            	{%else%}
+					href="#"
+					data-target="#exampleModalCenter"
+					role="button"
+					aria-expanded="false"
+					data-toggle="modal"
+            	{%endif%}>Menus</a>
 			  </li>
 			  <li>
 				  <a 
@@ -107,6 +122,15 @@
 		  <li>
 			<a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="bx bx-images mr-3"></span>Gallery</a>
 			<ul class="collapse list-unstyled" id="pageSubmenu">
+        <li>
+          <a href="{% url 'wedding' %}">Wedding</a>
+        </li>
+      <li>
+        <a href="#">Corporate</a>
+      </li>
+      <li>
+        <a href="{% url 'parties' %}">Parties</a>
+      </li>
 			  <li>
 				  <a href="#">Food</a>
 			  </li>

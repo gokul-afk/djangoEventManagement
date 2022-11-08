@@ -1,0 +1,140 @@
+{% extends 'index.html' %}
+
+{% block head %}
+
+<style>
+     .cover {
+        flex: 1;
+        height: 400px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1551217452629-RWKOFIQEXLATKXFD0T5R/image-asset.jpeg?format=2500w');
+    }
+    .item-1{
+        flex: 1;
+        height: 350px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1551296489765-PO4G8ML0MNBKR1HIIJB0/Wedding_1B.jpg?format=1500w');
+                
+    }
+    .item-2{
+        flex: 1;
+        height: 350px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1551216787760-A4L7H5Q5CA8PEJD2BE17/image-asset.jpeg?format=750w');
+                
+    }
+    .item-3{
+        flex: 1;
+        height: 350px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1552486522726-QIGLGGV6O7BHUCLTA5PO/Wedding_8.jpg?format=750w');
+                
+    }
+    .item-4{
+        flex: 1;
+        height: 350px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1551296524287-LHV2197OFI2UOEROVUJE/Wedding_3B.jpg?format=1500w');
+                
+    }
+    .item-5{
+        flex: 1;
+        height: 350px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1551296408571-FSTVI2SAGXXLI6KS1PNR/Wedding_Hero2B.jpg?format=2500w');
+                
+    }
+</style>
+
+{% endblock %}
+
+{% block topmenu %}
+<li class="nav-item">
+    <a class="nav-link" href="#">About</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">Contact</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="container  ">
+        <div class="col-12 cover ">
+        </div>  
+    <hr class="mt-4">
+    <div class="col-12 mt-4 text-center">    
+        <div class="col  ">
+            <h3>WEDDING</h3>
+            <h5>Let our food help you celebrate your special day.
+            </h5>
+        </div>
+
+    </div>
+    <hr class="mt-4">
+
+    <div class="col-12 mt-5 ">
+        <p>{{event.description}}</p>
+        
+    </div>
+
+
+    <div class="col-12 row  mt-4 ">   
+        <div class=" col-sm-6 col-lg-4 col-xl-9  d-inline-block p-3   ">
+        <div class="item-1 "></div>        
+        </div>
+        <div class=" col-sm-6 col-lg-4 col-xl-3  d-inline-block p-3   ">
+            <div class="item-2 "></div>        
+            </div>
+        <div class=" col-sm-6 col-lg-4 col-xl-3  d-inline-block p-3   ">
+        <div class="item-3 "></div>        
+        </div>
+        <div class=" col-sm-6 col-lg-4 col-xl-9  d-inline-block p-3   ">
+            <div class="item-4 "></div>        
+        </div>
+        <div class=" col-sm-6 col-lg-4 col-xl-12  d-inline-block p-3   ">
+            <div class="item-5 "></div>        
+        </div>
+    </div>
+
+    <div class="col-12 row  mt-4">   
+        <div class=" col-sm-6 col-lg-4 col-xl-4  d-inline-block p-3   ">
+        <div class="">“The food was delicious from the aperitifs to the fabulous dessert buffet, the service was impeccable and the staff were professional - the guests were gushing from beginning to end.”
+            — Sara E.</div>        
+        </div>
+        <div class=" col-sm-6 col-lg-4 col-xl-4  d-inline-block p-3   ">
+            <div class="">“The menu was imaginative, beautifully presented and delicious. Adam, Yolanda and their whole team made our wedding incredibly special and memorable.”
+                — Caroline P.</div>        
+            </div>
+            <div class=" col-sm-6 col-lg-4 col-xl-4  d-inline-block p-3   ">
+                <div class="">“I got married over two years ago and people still remark to me that the food at my wedding was not just the best wedding food they had ever had but some of the best food they had ever had, period.”
+                    — Olivia M.</div>        
+                </div>
+       
+    </div>
+    
+    <div class="col-12 text-center mt-5">
+        <a class="btn btn-primary d-block" href="{% url 'eventadd' %}">Request event</a>
+    </div>
+
+    </div>
+</div>
+{% endblock %}

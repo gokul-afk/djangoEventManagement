@@ -1,0 +1,127 @@
+{% extends 'index.html' %}
+
+{% block head %}
+
+<style>
+     .cover {
+        flex: 1;
+        height: 400px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1551296989663-FEI21QO7B9104YRX5ZRC/CocktailParty_Hero1.jpg?format=2500w');
+    }
+    .item-1{
+        flex: 1;
+        height: 350px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1551297919444-OGC0EE5H84X8KZFW8Y2U/Cocktail_1B.jpg?format=1500w');
+                
+    }
+    .item-2{
+        flex: 1;
+        height: 350px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1552679959054-XBY6V55SEWO6KCG32KTR/Cocktail_Long5.jpg?format=750w');
+                
+    }
+    .item-3{
+        flex: 1;
+        height: 350px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1551297094504-WAD7TCUSMKV1UAJUVQ4B/Cocktail_2.jpg?format=750w');
+                
+    }
+    .item-4{
+        flex: 1;
+        height: 350px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1551297496480-2FPXJBBLDKZZGCK171KP/Cocktail_4.jpg?format=1500w');
+                
+    }
+    .item-5{
+        flex: 1;
+        height: 350px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1551296998618-6UK4X0UXJ1SAZN9KKT54/CocktailParty_Hero2.jpg?format=2500w');
+                
+    }
+</style>
+
+{% endblock %}
+
+{% block topmenu %}
+<li class="nav-item">
+    <a class="nav-link" href="#">About</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">Contact</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="container  ">
+        <div class="col-12 cover ">
+        </div>  
+    <hr class="mt-4">
+    <div class="col-12 mt-4 text-center">    
+        <div class="col  ">
+            <h3>PARTIES
+
+            </h3>
+            <h5>Transform a traditional cocktail party into an Italian feast.
+
+            </h5>
+        </div>
+
+    </div>
+    <hr class="mt-4">
+
+    <div class="col-12 mt-5 ">
+        <p>{{event.description}}</p>
+        
+    </div>
+
+
+    <div class="col-12 row  mt-4 ">   
+        <div class=" col-sm-6 col-lg-4 col-xl-9  d-inline-block p-3   ">
+        <div class="item-1 "></div>        
+        </div>
+        <div class=" col-sm-6 col-lg-4 col-xl-3  d-inline-block p-3   ">
+            <div class="item-2 "></div>        
+            </div>
+        <div class=" col-sm-6 col-lg-4 col-xl-3  d-inline-block p-3   ">
+        <div class="item-3 "></div>        
+        </div>
+        <div class=" col-sm-6 col-lg-4 col-xl-9  d-inline-block p-3   ">
+            <div class="item-4 "></div>        
+        </div>
+        <div class=" col-sm-6 col-lg-4 col-xl-12  d-inline-block p-3   ">
+            <div class="item-5 "></div>        
+        </div>
+    </div>
+
+    <div class="col-12 text-center mt-5">
+        <a class="btn btn-primary d-block" href="{% url 'eventadd' %}">Request event</a>
+    </div>
+
+    </div>
+</div>
+{% endblock %}

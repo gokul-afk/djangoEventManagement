@@ -1,5 +1,107 @@
 {% extends 'index.html' %}
 
+{% block head %}
+
+<style>
+        .item {
+  flex: 1;
+  height: 70%;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  transition: flex .5s ease;
+}
+
+{% for i in cat %}
+
+.item-{{i.id}} { 
+  background-image: url('{{ i.image.url }}');
+  
+  }
+
+{% endfor %}
+
+.item {
+    height: 200px;
+}
+
+
+.gb3 {
+    border: 2px solid #fff;
+}
+{%if not product %}
+.gb1:hover .gb3 {
+    border: 2px dashed #494ca2;
+}
+
+.gb1:hover .bottom a h5{
+    
+    color:#494ca2;
+}
+{% endif %}
+     .cover {
+        flex: 1;
+        height: 400px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1551217452629-RWKOFIQEXLATKXFD0T5R/image-asset.jpeg?format=2500w');
+    }
+    .item-a{
+        flex: 1;
+        height: 350px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1551296489765-PO4G8ML0MNBKR1HIIJB0/Wedding_1B.jpg?format=1500w');
+                
+    }
+    .item-b{
+        flex: 1;
+        height: 600px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1549060890082-B77DFQCYO4Q2CZK6WZ1E/FUN00422.jpg?format=750w');
+                
+    }
+    .item-c{
+        flex: 1;
+        height: 300px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1550158721418-7F3PO3LY1JB1KKTHIMCY/Pasta-Station-2.png?format=750w');
+                
+    }
+    .item-d{
+        flex: 1;
+        height: 630px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1549060333589-U7PCYVH9VRHFXO6TGB9C/Ginevra_2018-115.jpg?format=1500w');
+                
+    }
+    .item-e{
+        flex: 1;
+        height: 300px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: flex .5s ease;
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5c50939a5cfd79f7cb2598ee/1552927690210-7LTB0WCOGNGFH0XK1A8N/0019-IP2C8465.jpg?format=750w');
+                
+    }
+</style>
+
+{% endblock %}
+
 {% block topmenu %}
 <li class="nav-item">
     <a class="nav-link" href="#">About</a>
@@ -10,8 +112,65 @@
 {% endblock %}
 
 {% block content %}
-<div class="row text-uppercase text-center d-block mt-5 pt-5" style="font-size:150px;line-height: 130px;color:#494ca2 ;font-weight: 600;">
-   Welcome to <br> Catering & Events
 
+<div class="col-12 row  mt-4 ">   
+
+    <div class=" col-sm-6 col-lg-4 col-xl-8  d-inline-block p-3  ">
+    <h1>Welcome!!<br>
+        Catering Hospitality at its finest.
+        </h1>    
+    <p>We approach each event with the special attention it deserves. We’ll work with you every step of the way, bringing with us our innate sense of sophistication and elegance. We specialize in upscale cocktails, seated and buffet dinners, weddings, galas and charity events. With fundamentals in traditional Italian cooking, we customize every menu for each occasion and ensure that you receive the finest in Italian hospitality. </p>   
+    </div>
+    <div class=" col-sm-6 col-lg-4 col-xl-4  d-inline-block p-3   ">
+        <div class="item-b "></div>        
+        </div>
+    <div class=" col-sm-6 col-lg-4 col-xl-8  d-inline-block p-3   ">
+        <div class="item-d "></div>        
+    </div>
+    
+    <div class="col-4  row">
+        <div class=" col-sm-6 col-lg-4 col-xl-12  d-inline-block p-3   ">
+            <div class="item-c "></div>        
+        </div>
+    <div class=" col-sm-6 col-lg-4 col-xl-12  d-inline-block p-3   ">
+        <div class="item-e "></div>        
+    </div>
+    </div>
+    <div class=" col-sm- col-lg-4 col-xl-12  d-inline-block p-3  text-center">
+        <h1>Perfect for every event.
+            </h1>    
+        <p>Browse our <a  href="{% url 'wedding' %}">Wedding</a> and <a href="{% url 'parties' %}">Parties</a> pages for lorem ipsum delor moncut. </p>   
+        </div>
+    
+        
+    
+        
+
+</div>
+<div class="row  d-flex justify-content-center " >
+    {% for i in cat %}
+    <a href="{% url 'catlist' i.name %}">
+
+    <div class=" col-sm-6 col-lg-4 col-xl-3 h-100 d-inline-block p-1 pt-5 gb1">
+    <div class="gb3">
+    <div class="item item-{{i.id}} m-3 p-5">
+    
+  
+    </div></div>
+    
+    <div class=" bottom">
+      <a class="nav-link" {% if not product %} href="{% url 'catlist' i.name %}" {% else %}  href="{% url 'product' i.name %}" {% endif %}>
+        <h5 class="text-center text-uppercase gb">{{i.name}}</h5></a>
+        
+    </div>
+
+
+    </div>
+    </a>
+
+  {% endfor %}
+  </div>
+  <div class="col-12 text-center mt-5">
+    <a class="btn btn-primary d-block" href="{% url 'eventadd' %}">Request event</a>
 </div>
 {% endblock %}

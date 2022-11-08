@@ -44,7 +44,15 @@ def dashboard(request):
 
 def home(request):
     print(request.user)
-    return render(request,'home.html')
+    categories=FoodCategory.objects.get(name='All').get_children().order_by('order')
+    context = {'cat':categories}
+    return render(request,'home.html',context)
+
+def wedding(request):
+    return render(request,'wedding.html')
+
+def parties(request):
+    return render(request,'Parties.html')
 
 def profile(request,pk):
     user = UserProfile.objects.get(id=pk)
